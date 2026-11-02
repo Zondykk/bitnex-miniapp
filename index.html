@@ -7,21 +7,23 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #050510;
-      --card: #0d0d1a;
-      --accent: #00a2ff;
-      --accent-glow: #00d4ff;
-      --text: #ffffff;
-      --text-secondary: #8b9bb4;
+      --bg: #07070f;
+      --bg-card: #0f111a;
+      --bg-card-2: #12151f;
+      --border: rgba(0, 140, 255, 0.18);
+      --border-strong: rgba(0, 160, 255, 0.35);
+      --accent: #00a8ff;
+      --accent-2: #0077ff;
+      --accent-glow: rgba(0, 168, 255, 0.35);
+      --text: #f0f4ff;
+      --text-secondary: #8b9bb8;
+      --text-muted: #5a6a85;
       --success: #00e676;
+      --warning: #ffb300;
+      --radius: 16px;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -29,391 +31,433 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 80px;
+      padding-bottom: 90px;
     }
 
-    .header {
-      padding: 16px 20px;
+    .app-header {
+      padding: 14px 16px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: linear-gradient(180deg, rgba(0,30,60,0.6) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(0,40,80,0.4) 0%, transparent 100%);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 18px;
+    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .brand-logo {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #00a8ff, #0055ff);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 20px; color: white;
+      box-shadow: 0 0 18px var(--accent-glow);
     }
 
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #00a2ff, #0066ff);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 20px;
-      box-shadow: 0 0 20px rgba(0, 162, 255, 0.4);
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-name { font-weight: 700; font-size: 16px; line-height: 1.2; }
+    .brand-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .header-btn {
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); padding: 6px 10px; border-radius: 10px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
     }
+
+    .level-badge {
+      background: linear-gradient(135deg, rgba(0,168,255,0.2), rgba(0,100,255,0.15));
+      border: 1px solid var(--border-strong);
+      color: var(--accent); padding: 5px 10px; border-radius: 10px;
+      font-size: 12px; font-weight: 700;
+    }
+
+    .balance-section { padding: 8px 16px 0; }
 
     .balance-card {
-      margin: 10px 16px 24px;
-      background: linear-gradient(145deg, #0a1628, #0d0d1a);
-      border: 1px solid rgba(0, 162, 255, 0.25);
-      border-radius: 20px;
-      padding: 24px 20px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      background: linear-gradient(145deg, #0c1424, #0a0e18);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 18px; position: relative; overflow: hidden;
     }
 
     .balance-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(0,162,255,0.08) 0%, transparent 60%);
+      content: ''; position: absolute; top: -40%; right: -20%;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(0,168,255,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    .balance-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+    .balance-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .balance-label { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+    .balance-hint { font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 3px 8px; border-radius: 6px; }
 
     .balance-value {
-      font-size: 36px;
-      font-weight: 700;
-      background: linear-gradient(90deg, #00d4ff, #00a2ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
+      font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #4dc9ff, #00a8ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.15;
+    }
+    .balance-token { font-size: 16px; font-weight: 600; color: var(--accent); margin-left: 4px; }
+
+    .mining-card {
+      margin: 14px 16px 0; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 18px; padding: 16px;
     }
 
-    .balance-usd {
-      font-size: 14px;
-      color: var(--text-secondary);
+    .mining-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .mining-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+    .status-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
+    .mining-status { font-size: 12px; color: var(--success); font-weight: 500; }
+
+    .leagues-btn {
+      background: rgba(0,168,255,0.12); border: 1px solid var(--border);
+      color: var(--accent); padding: 5px 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
     }
 
-    .section {
-      padding: 0 16px;
-      margin-bottom: 24px;
-    }
+    .earned-now { font-size: 28px; font-weight: 700; color: var(--success); margin-bottom: 10px; letter-spacing: -0.5px; }
 
-    .section-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .progress-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 12%; background: linear-gradient(90deg, #00a8ff, #00e5ff); border-radius: 10px; transition: width 0.4s ease; }
+    .progress-text { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; justify-content: space-between; }
 
-    .mine-button {
-      width: 100%;
-      height: 64px;
-      border: none;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #00a2ff, #0066ff);
-      color: white;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 8px 30px rgba(0, 102, 255, 0.4);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 14px 16px 0; }
+    .stat-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 8px; text-align: center; }
+    .stat-icon { font-size: 16px; margin-bottom: 4px; }
+    .stat-value { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .stat-label { font-size: 11px; color: var(--text-muted); }
+    .stat-value.blue { color: var(--accent); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.orange { color: #ffb74d; }
 
-    .mine-button:active {
-      transform: scale(0.97);
+    .hold-info {
+      margin: 14px 16px 0;
+      background: linear-gradient(90deg, rgba(0,168,255,0.08), rgba(0,100,255,0.05));
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 13px;
     }
-
-    .mine-button.disabled {
-      background: #1a1a2e;
-      box-shadow: none;
-      color: #555;
-      cursor: not-allowed;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
+    .hold-left { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); }
+    .hold-value { font-weight: 700; color: var(--accent); }
 
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      background: rgba(8, 8, 18, 0.95);
-      backdrop-filter: blur(20px);
+      position: fixed; bottom: 0; left: 0; right: 0; height: 72px;
+      background: rgba(8, 10, 18, 0.97); backdrop-filter: blur(16px);
       border-top: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding-bottom: env(safe-area-inset-bottom);
-      z-index: 100;
-}
+      display: flex; justify-content: space-around; align-items: center;
+      padding-bottom: env(safe-area-inset-bottom); z-index: 100;
+    }
 
     .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: var(--text-secondary);
-      font-size: 11px;
-      cursor: pointer;
-      padding: 8px 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text-muted); font-size: 10px; font-weight: 500;
+      cursor: pointer; padding: 6px 10px; min-width: 60px; transition: color 0.2s;
+    }
+    .nav-item.active { color: var(--accent); }
+    .nav-icon { font-size: 22px; line-height: 1; }
+
+    .nav-item.center { position: relative; top: -12px; }
+    .nav-item.center .nav-icon-wrap {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #00a8ff, #0066ff);
+      border-radius: 16px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 20px rgba(0, 120, 255, 0.4); font-size: 24px; color: white;
     }
 
-    .nav-item.active {
-      color: var(--accent);
+    .page { display: none; animation: fadeIn 0.25s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .page-title { font-size: 18px; font-weight: 700; padding: 16px 16px 12px; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin: 0 16px 12px; }
+
+    .btn-primary {
+      width: 100%; height: 50px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, #00a8ff, #0066ff); color: white;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 100, 255, 0.35); transition: transform 0.15s;
+    }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      width: 100%; height: 46px; border: 1px solid var(--border-strong);
+      border-radius: 12px; background: transparent; color: var(--accent);
+      font-size: 14px; font-weight: 600; cursor: pointer;
     }
 
-    .nav-icon {
-      font-size: 22px;
+    .ref-code-box {
+      background: rgba(0,168,255,0.08); border: 1px dashed var(--border-strong);
+      border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 14px;
+    }
+    .ref-code { font-size: 22px; font-weight: 700; letter-spacing: 1px; color: var(--accent); margin: 6px 0; }
+    .ref-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .ref-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .ref-stat { background: var(--bg-card-2); border-radius: 12px; padding: 14px; text-align: center; }
+    .ref-stat-value { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .ref-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .info-block {
+      background: rgba(0,168,255,0.06); border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0; padding: 12px 14px; margin-bottom: 14px;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.45;
     }
 
-    .page {
-      display: none;
+    .withdraw-input {
+      width: 100%; background: var(--bg-card-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; color: var(--text); font-size: 18px; font-weight: 600; outline: none;
+    }
+    .withdraw-input:focus { border-color: var(--accent); }
+    .quick-amounts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .quick-btn {
+      background: var(--bg-card-2); border: 1px solid var(--border); color: var(--text-secondary);
+      padding: 7px 12px; border-radius: 8px; font-size: 13px; cursor: pointer;
     }
 
-    .page.active {
-      display: block;
+    .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px; }
+    .menu-item {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 18px 14px; text-align: center; cursor: pointer;
+    }
+    .menu-item-icon { font-size: 28px; margin-bottom: 8px; }
+    .menu-item-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .menu-item-desc { font-size: 11px; color: var(--text-muted); }
+    .menu-tag {
+      display: inline-block; margin-top: 8px; font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 6px; background: rgba(0,168,255,0.15); color: var(--accent);
     }
 
-    .task-item {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200;
+      display: none; align-items: flex-end; justify-content: center;
     }
-
-    .task-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--bg-card); border-radius: 20px 20px 0 0;
+      width: 100%; max-width: 480px; padding: 20px 18px 30px; max-height: 80vh; overflow-y: auto;
     }
-
-    .task-title {
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    .task-reward {
-      font-size: 13px;
-      color: var(--accent);
-    }
-
-    .task-btn {
-      background: rgba(0, 162, 255, 0.15);
-      color: var(--accent);
-      border: none;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .profile-card {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 20px;
-      margin: 0 16px 20px;
-      text-align: center;
-    }
-
-    .avatar {
-      width: 72px;
-      height: 72px;
-      background: linear-gradient(135deg, #00a2ff, #0066ff);
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      font-weight: 700;
-      box-shadow: 0 0 30px rgba(0, 162, 255, 0.3);
-    }
-
-    .wallet-btn {
-      width: 100%;
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(0, 162, 255, 0.4);
-      background: transparent;
-      color: var(--accent);
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 14px; text-align: center; }
+    .modal-close {
+      width: 100%; margin-top: 16px; height: 46px; border: none; border-radius: 12px;
+      background: rgba(255,255,255,0.08); color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logo">
-      <div class="logo-icon">B</div>
-      <span>BitneX</span>
-    </div>
-    <div style="font-size: 13px; color: var(--text-secondary);" id="user-greeting">Привет!</div>
-  </div>
-
-  <div id="page-home" class="page active">
-    <div class="balance-card">
-      <div class="balance-label">Ваш баланс</div>
-      <div class="balance-value" id="balance">0.00 BTX</div>
-      <div class="balance-usd">≈ $0.00</div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Майнинг</div>
-      <button class="mine-button" id="mine-btn" onclick="startMining()">
-        ⛏️ Начать майнинг
-      </button>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Статистика</div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="mined-today">0</div>
-          <div class="stat-label">Добыто сегодня</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="total-mined">0</div>
-          <div class="stat-label">Всего добыто</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="friends">0</div>
-          <div class="stat-label">Друзей</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="power">1x</div>
-          <div class="stat-label">Мощность</div>
-        </div>
+  <div class="app-header">
+    <div class="brand">
+      <div class="brand-logo">B</div>
+      <div class="brand-text">
+        <div class="brand-name">BitneX Mining</div>
+        <div class="brand-sub">Official Web3 App</div>
       </div>
+    </div>
+    <div class="header-actions">
+      <div class="header-btn" onclick="alert('Правила и информация')">📘</div>
+      <div class="level-badge" id="level-badge">Ур. 1</div>
     </div>
   </div>
 
-  <div id="page-tasks" class="page">
-    <div class="section" style="padding-top: 10px;">
-      <div class="section-title">Ежедневные задания</div>
-      
-      <div class="task-item">
-        <div class="task-info">
-          <div class="task-title">Подписаться на канал</div>
-          <div class="task-reward">+50 BTX</div>
+  <!-- PAGE MINING -->
+  <div id="page-mining" class="page active">
+    <div class="balance-section">
+      <div class="balance-card">
+        <div class="balance-top">
+          <div class="balance-label"><span>◈</span> Баланс в приложении</div>
+          <div class="balance-hint">Не влияет на уровень</div>
         </div>
-        <button class="task-btn">Выполнить</button>
+        <div>
+          <span class="balance-value" id="app-balance">0.0000</span>
+          <span class="balance-token">BTX</span>
+        </div>
       </div>
+    </div>
 
-      <div class="task-item">
-        <div class="task-info">
-          <div class="task-title">Пригласить 3 друзей</div>
-          <div class="task-reward">+150 BTX</div>
+    <div class="mining-card">
+      <div class="mining-header">
+        <div class="mining-title">
+          <span class="status-dot"></span>
+          <span>Активный майнинг</span>
+          <span class="mining-status">• Работает</span>
         </div>
-        <button class="task-btn">Выполнить</button>
+        <button class="leagues-btn" onclick="showLevels()">Лиги</button>
       </div>
+      <div class="earned-now" id="pending-earn">+0.0000 BTX</div>
+      <div class="progress-bar"><div class="progress-fill" id="level-progress"></div></div>
+      <div class="progress-text">
+        <span>До следующего уровня</span>
+        <span id="progress-percent">0%</span>
+      </div>
+    </div>
 
-      <div class="task-item">
-        <div class="task-info">
-          <div class="task-title">Сделать 10 майнингов</div>
-          <div class="task-reward">+100 BTX</div>
-        </div>
-        <button class="task-btn">Выполнить</button>
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value blue" id="rate-hour">20.0</div>
+        <div class="stat-label">В час</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value green" id="rate-day">~480</div>
+        <div class="stat-label">В сутки</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-value orange" id="boost-mult">×1.00</div>
+        <div class="stat-label">Буст</div>
+      </div>
+    </div>
+
+    <div class="hold-info">
+      <div class="hold-left"><span>💼</span><span>Холд на кошельке:</span></div>
+      <div class="hold-value" id="wallet-hold">0 BTX</div>
+    </div>
+
+    <div style="padding: 18px 16px 0;">
+      <button class="btn-primary" id="claim-btn" onclick="claimRewards()">Собрать награды</button>
+    </div>
+  </div>
+
+  <!-- PAGE SHOP -->
+  <div id="page-shop" class="page">
+    <div class="page-title">Магазин</div>
+    <div class="card">
+      <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Покупка BTX за TON по рыночному курсу</div>
+      <div style="text-align: center; padding: 12px 0;">
+        <div style="font-size: 22px; font-weight: 700; color: var(--accent);">1 BTX ≈ — TON</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Источник: STON.fi</div>
+      </div>
+      <button class="btn-primary" onclick="alert('Интеграция со STON.fi будет добавлена')">Купить BTX</button>
+      <div style="margin-top: 12px;"><button class="btn-secondary" onclick="alert('История пуста')">История пополнений</button></div>
+    </div>
+  </div>
+
+  <!-- PAGE MENU -->
+  <div id="page-menu" class="page">
+    <div class="page-title">Меню</div>
+    <div class="menu-grid">
+      <div class="menu-item" onclick="alert('Стейкинг в разработке')">
+        <div class="menu-item-icon">💎</div>
+        <div class="menu-item-title">Стейкинг</div>
+        <div class="menu-item-desc">Доход до +35% APY</div>
+        <div class="menu-tag">+35%</div>
+      </div>
+      <div class="menu-item" onclick="alert('Задания в разработке')">
+        <div class="menu-item-icon">📋</div>
+        <div class="menu-item-title">Задания</div>
+        <div class="menu-item-desc">Стрик и награды</div>
+        <div class="menu-tag">NEW</div>
+      </div>
+      <div class="menu-item" onclick="alert('Амбассадор в разработке')">
+        <div class="menu-item-icon">👑</div>
+        <div class="menu-item-title">Амбассадор</div>
+        <div class="menu-item-desc">Партнёрка до 25%</div>
+      </div>
+      <div class="menu-item" onclick="alert('Башня в разработке')">
+        <div class="menu-item-icon">🏗️</div>
+        <div class="menu-item-title">Башня</div>
+        <div class="menu-item-desc">Крипто-башня</div>
+        <div class="menu-tag">HOT</div>
       </div>
     </div>
   </div>
 
+  <!-- PAGE FRIENDS -->
   <div id="page-friends" class="page">
-    <div class="section" style="padding-top: 10px;">
-      <div class="section-title">Реферальная программа</div>
-      <div class="balance-card" style="margin: 0 0 20px;">
-        <div class="balance-label">Ваша реферальная ссылка</div>
-        <div style="font-size: 14px; word-break: break-all; margin: 10px 0; color: var(--accent);" id="ref-link">
-          Загрузка...
-        </div>
-        <button class="mine-button" style="height: 48px; font-size: 15px;" onclick="copyRef()">
-          Скопировать ссылку
-        </button>
+    <div class="page-title">Друзья</div>
+    <div class="card">
+      <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 10px;">
+        Приглашай друзей и получай <b style="color: var(--accent);">5%</b> от их сборов
       </div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="ref-count">0</div>
-          <div class="stat-label">Приглашено</div>
+      <div class="ref-code-box">
+        <div style="font-size: 12px; color: var(--text-muted);">Ваш реферальный код</div>
+        <div class="ref-code" id="ref-code">—</div>
+        <div class="ref-actions">
+          <button class="btn-secondary" style="height:42px" onclick="copyRef()">Копировать</button>
+          <button class="btn-primary" style="height:42px" onclick="shareRef()">Поделиться</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-value" id="ref-earned">0</div>
-          <div class="stat-label">Заработано</div>
+      </div>
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <div class="ref-stat-value" id="ref-count">0</div>
+          <div class="ref-stat-label">Приглашено</div>
+        </div>
+        <div class="ref-stat">
+          <div class="ref-stat-value" id="ref-earned">0.00</div>
+          <div class="ref-stat-label">Заработано BTX</div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="page-profile" class="page">
-    <div class="profile-card">
-      <div class="avatar" id="avatar">U</div>
-      <div style="font-size: 18px; font-weight: 600;" id="username">User</div>
-      <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;" id="user-id">ID: —</div>
-      <button class="wallet-btn" onclick="connectWallet()">
-        Подключить кошелёк TON
-      </button>
+  <!-- PAGE WITHDRAW -->
+  <div id="page-withdraw" class="page">
+    <div class="page-title">Вывод</div>
+    <div class="card">
+      <div class="info-block">
+        Минимальная сумма: <b>10 000 BTX</b><br>
+        Комиссия сервиса: 5%<br>
+        Интервал между заявками: 24 часа
+      </div>
+      <div style="margin: 16px 0;">
+        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">Сумма для вывода</div>
+        <input class="withdraw-input" type="number" id="withdraw-amount" value="10000" />
+        <div class="quick-amounts">
+          <button class="quick-btn" onclick="setAmount(10000)">10k</button>
+          <button class="quick-btn" onclick="setAmount(25000)">25k</button>
+          <button class="quick-btn" onclick="setAmount(50000)">50k</button>
+          <button class="quick-btn" onclick="setAmount(100000)">100k</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="requestWithdraw()">Вывести на кошелёк</button>
+      <div style="margin-top: 14px; font-size: 12px; color: var(--text-muted); text-align: center;">
+        Для вывода необходимо подключить и верифицировать TON-кошелёк
+      </div>
     </div>
   </div>
 
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="showPage('home')">
-      <div class="nav-icon">🏠</div>
-      <div>Главная</div>
+    <div class="nav-item active" onclick="showPage('mining', this)">
+      <div class="nav-icon">⛏️</div>
+      <div>Майнинг</div>
     </div>
-    <div class="nav-item" onclick="showPage('tasks')">
-      <div class="nav-icon">📋</div>
-      <div>Задания</div>
+    <div class="nav-item" onclick="showPage('shop', this)">
+      <div class="nav-icon">🛒</div>
+      <div>Магазин</div>
     </div>
-    <div class="nav-item" onclick="showPage('friends')">
+    <div class="nav-item center" onclick="showPage('menu', this)">
+      <div class="nav-icon-wrap">▦</div>
+    </div>
+    <div class="nav-item" onclick="showPage('friends', this)">
       <div class="nav-icon">👥</div>
       <div>Друзья</div>
     </div>
-    <div class="nav-item" onclick="showPage('profile')">
-      <div class="nav-icon">👤</div>
-      <div>Профиль</div>
+    <div class="nav-item" onclick="showPage('withdraw', this)">
+      <div class="nav-icon">💼</div>
+      <div>Вывод</div>
+    </div>
+  </div>
+
+  <!-- LEVELS MODAL -->
+  <div class="modal-overlay" id="levels-modal">
+    <div class="modal">
+      <div class="modal-title">Система уровней</div>
+      <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
+        Уровень и буст зависят <b>только</b> от количества BTX на подключённом TON-кошельке. Баланс внутри приложения на уровень не влияет.
+      </div>
+      <div style="background: var(--bg-card-2); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span>Текущий уровень</span>
+          <span style="color: var(--accent); font-weight: 700;" id="modal-level">1</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 6px;">
+          <span>Холд на кошельке</span>
+          <span style="color: var(--accent); font-weight: 700;" id="modal-hold">0 BTX</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 6px;">
+          <span>Множитель</span>
+          <span style="color: var(--success); font-weight: 700;" id="modal-boost">×1.00</span>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeLevels()">Понятно</button>
     </div>
   </div>
 
@@ -421,87 +465,99 @@
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#050510');
-    tg.setBackgroundColor('#050510');
+    tg.setHeaderColor('#07070f');
+    tg.setBackgroundColor('#07070f');
 
     const user = tg.initDataUnsafe?.user;
-    if (user) {
-      document.getElementById('user-greeting').textContent = `Привет, ${user.first_name}!`;
-      document.getElementById('username').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-      document.getElementById('user-id').textContent = `ID: ${user.id}`;
-      document.getElementById('avatar').textContent = user.first_name.charAt(0).toUpperCase();
-      
-      const botUsername = 'BitneXMining_bot';
-      document.getElementById('ref-link').textContent = `https://t.me/${botUsername}?start=${user.id}`;
-    }
-
-    let balance = parseFloat(localStorage.getItem('btx_balance') || '0');
-    let totalMined = parseFloat(localStorage.getItem('btx_total') || '0');
-    let minedToday = parseFloat(localStorage.getItem('btx_today') || '0');
+    let appBalance = parseFloat(localStorage.getItem('btx_app_balance') || '0');
+    let pending = parseFloat(localStorage.getItem('btx_pending') || '0');
+    let walletHold = 0;
+    let currentLevel = 1;
+    let boost = 1.0;
+    let hourlyRate = 20;
 
     function updateUI() {
-      document.getElementById('balance').textContent = balance.toFixed(2) + ' BTX';
-      document.getElementById('total-mined').textContent = totalMined.toFixed(0);
-      document.getElementById('mined-today').textContent = minedToday.toFixed(0);
+      document.getElementById('app-balance').textContent = appBalance.toFixed(4);
+      document.getElementById('pending-earn').textContent = '+' + pending.toFixed(4) + ' BTX';
+      document.getElementById('rate-hour').textContent = hourlyRate.toFixed(1);
+      document.getElementById('rate-day').textContent = '~' + Math.round(hourlyRate * 24);
+      document.getElementById('boost-mult').textContent = '×' + boost.toFixed(2);
+      document.getElementById('wallet-hold').textContent = walletHold.toLocaleString() + ' BTX';
+      document.getElementById('level-badge').textContent = 'Ур. ' + currentLevel;
+      document.getElementById('modal-level').textContent = currentLevel;
+      document.getElementById('modal-hold').textContent = walletHold + ' BTX';
+      document.getElementById('modal-boost').textContent = '×' + boost.toFixed(2);
+      const progress = Math.min(95, (walletHold / 500) * 100);
+      document.getElementById('level-progress').style.width = progress + '%';
+      document.getElementById('progress-percent').textContent = Math.round(progress) + '%';
     }
+
+    if (user) {
+      document.getElementById('ref-code').textContent = user.id.toString().slice(-9);
+    }
+
     updateUI();
 
-    function startMining() {
-      const btn = document.getElementById('mine-btn');
-      if (btn.classList.contains('disabled')) return;
+    setInterval(() => {
+      const add = (hourlyRate / 3600) * 3 * boost;
+      pending += add;
+      localStorage.setItem('btx_pending', pending);
+      document.getElementById('pending-earn').textContent = '+' + pending.toFixed(4) + ' BTX';
+    }, 3000);
 
-      btn.classList.add('disabled');
-      btn.textContent = '⛏️ Майнинг...';
-
-      setTimeout(() => {
-        const reward = +(Math.random() * 5 + 1).toFixed(2);
-        balance += reward;
-        totalMined += reward;
-        minedToday += reward;
-
-        localStorage.setItem('btx_balance', balance);
-        localStorage.setItem('btx_total', totalMined);
-        localStorage.setItem('btx_today', minedToday);
-
-        updateUI();
-        btn.textContent = `+${reward} BTX`;
-        
-        if (tg.HapticFeedback) {
-          tg.HapticFeedback.notificationOccurred('success');
-        }
-
-        setTimeout(() => {
-          btn.classList.remove('disabled');
-          btn.textContent = '⛏️ Начать майнинг';
-        }, 1500);
-      }, 1200);
-    }
-
-    function showPage(page) {
+    function showPage(page, el) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
       document.getElementById('page-' + page).classList.add('active');
-      event.currentTarget.classList.add('active');
+      if (el) el.classList.add('active');
     }
 
+    function claimRewards() {
+      if (pending < 0.0001) {
+        (tg.showAlert && tg.showAlert('Пока нечего собирать')) || alert('Пока нечего собирать');
+        return;
+      }
+      appBalance += pending;
+      pending = 0;
+      localStorage.setItem('btx_app_balance', appBalance);
+      localStorage.setItem('btx_pending', 0);
+      updateUI();
+      if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      (tg.showAlert && tg.showAlert('Награды собраны!')) || alert('Награды собраны!');
+    }
+
+    function showLevels() { document.getElementById('levels-modal').classList.add('show'); }
+    function closeLevels() { document.getElementById('levels-modal').classList.remove('show'); }
+
     function copyRef() {
-      const link = document.getElementById('ref-link').textContent;
+      const code = document.getElementById('ref-code').textContent;
+      const link = 'https://t.me/BitneXMining_bot?start=' + code;
       navigator.clipboard.writeText(link).then(() => {
-        if (tg.showAlert) {
-          tg.showAlert('Ссылка скопирована!');
-        } else {
-          alert('Ссылка скопирована!');
-        }
+        (tg.showAlert && tg.showAlert('Ссылка скопирована!')) || alert('Ссылка скопирована!');
       });
     }
 
-    function connectWallet() {
-      if (tg.showAlert) {
-        tg.showAlert('Подключение кошелька будет добавлено в следующей версии');
-      } else {
-        alert('Подключение кошелька будет добавлено в следующей версии');
+    function shareRef() {
+      const code = document.getElementById('ref-code').textContent;
+      const link = 'https://t.me/BitneXMining_bot?start=' + code;
+      if (tg.openTelegramLink) {
+        tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Присоединяйся к BitneX Mining!'));
+      } else { copyRef(); }
+    }
+
+    function setAmount(val) { document.getElementById('withdraw-amount').value = val; }
+
+    function requestWithdraw() {
+      const amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
+      if (amount < 10000) {
+        (tg.showAlert && tg.showAlert('Минимум 10 000 BTX')) || alert('Минимум 10 000 BTX');
+        return;
       }
+      if (amount > appBalance) {
+        (tg.showAlert && tg.showAlert('Недостаточно средств')) || alert('Недостаточно средств');
+        return;
+      }
+      (tg.showAlert && tg.showAlert('Для вывода нужно подключить TON-кошелёк')) || alert('Нужно подключить кошелёк');
     }
   </script>
 </body>
