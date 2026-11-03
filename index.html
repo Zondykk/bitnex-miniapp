@@ -833,8 +833,24 @@
     }
 
     // ===== API =====
+    function applyServerData(data) {
+      if (!data) return;
+      appBalance = Number(data.app_balance) || 0;
+      pending = Number(data.pending) || 0;
+      walletHold = Number(data.wallet_hold) || 0;
+      refCount = data.referrals?.count || 0;
+      refEarned = Number(data.referrals?.earned) || 0;
+      if (data.rate) hourlyRate = Number(data.rate);
+      if (data.boost) boost = Number(data.boost);
+      if (data.level) currentLevel = Number(data.level);
+      if (data.ref_code) {
+        document.getElementById('ref-code').textContent = data.ref_code;
+      }
+      updateUI();
+    }
+
     async function registerUser() {
-      if (!userId) return;
+      if (!userId) return null;
       try {
         const res = await fetch(API + '/api/register', {
           method: 'POST',
@@ -847,60 +863,44 @@
             start_param: startParam
           })
         });
+        if (!res.ok) throw new Error('register failed');
         const data = await res.json();
-        if (data.id) {
-          appBalance = Number(data.app_balance) || 0;
-          pending = Number(data.pending) || 0;
-          walletHold = Number(data.wallet_hold) || 0;
-          refCount = data.referrals?.count || 0;
-          refEarned = data.referrals?.earned || 0;
-          if (user) {
-            document.getElementById('ref-code').textContent = data.ref_code || user.id.toString().slice(-9);
-          }
-          updateUI();
-        }
+        applyServerData(data);
+        return data;
       } catch (e) {
         console.error('register error', e);
         showToast('Ошибка подключения к серверу');
+        return null;
       }
     }
 
     async function loadUser() {
-      if (!userId) return;
+      if (!userId) return null;
       try {
         const res = await fetch(API + '/api/user/' + userId);
-        if (!res.ok) return;
+        if (!res.ok) return null;
         const data = await res.json();
-        appBalance = Number(data.app_balance) || 0;
-        pending = Number(data.pending) || 0;
-        walletHold = Number(data.wallet_hold) || 0;
-        refCount = data.referrals?.count || 0;
-        refEarned = data.referrals?.earned || 0;
-        if (data.ref_code) {
-          document.getElementById('ref-code').textContent = data.ref_code;
-        }
-        updateUI();
+        applyServerData(data);
+        return data;
       } catch (e) {
         console.error('load error', e);
+        return null;
       }
     }
 
-    // Init
+    // Init — обязательно регистрируем и сразу подтягиваем pending с сервера
     if (user) {
       document.getElementById('ref-code').textContent = user.id.toString().slice(-9);
     }
-    registerUser().then(() => loadUser());
+    (async function init() {
+      await registerUser();
+      await loadUser();
+    })();
 
-    // Майнинг считается на сервере. Периодически подтягиваем актуальный pending.
+    // Каждые 10 сек подтягиваем актуальный pending с сервера (майнинг 24/7 на бэке)
     setInterval(async () => {
       await loadUser();
-      const el = document.getElementById('pending-earn');
-      if (el) {
-        el.classList.remove('bump');
-        void el.offsetWidth;
-        el.classList.add('bump');
-      }
-    }, 15000); // каждые 15 сек обновляем с сервера
+    }, 10000);
 
     const withdrawInput = document.getElementById('withdraw-amount');
     if (withdrawInput) withdrawInput.addEventListener('input', updateUI);
