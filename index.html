@@ -8,367 +8,1024 @@
   <script src="https://unpkg.com/@tonconnect/ui@2.0.11/dist/tonconnect-ui.min.js"></script>
   <style>
     :root {
-      --bg: #0b0f14;
-      --card: #121820;
+      --bg: #070b10;
+      --bg2: #0c1219;
+      --card: rgba(18, 24, 32, 0.85);
+      --card-solid: #121820;
       --card2: #161d27;
-      --border: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.07);
+      --border-light: rgba(255,255,255,0.12);
       --text: #f0f4f8;
       --muted: #8b9bb0;
       --blue: #2f9bff;
+      --blue-glow: rgba(47,155,255,0.35);
       --blue2: #1a7ae0;
       --green: #22c55e;
+      --green-glow: rgba(34,197,94,0.3);
       --gold: #f5c518;
+      --gold-glow: rgba(245,197,24,0.25);
       --danger: #ef4444;
       --purple: #a855f7;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(47,155,255,0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(168,85,247,0.06), transparent);
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 88px;
+      padding-bottom: 92px;
     }
-    .app { max-width: 430px; margin: 0 auto; }
+
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ===== HEADER ===== */
     .header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 16px 10px;
     }
-    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
     .logo {
-      width: 40px; height: 40px; border-radius: 12px;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
       background: linear-gradient(135deg, #2f9bff, #0057c8);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 18px; color: #fff;
-      box-shadow: 0 4px 14px rgba(47,155,255,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 4px 18px var(--blue-glow);
     }
-    .brand-text .name { font-weight: 700; font-size: 15px; }
-    .brand-text .sub { font-size: 10px; color: var(--muted); letter-spacing: 0.4px; }
-    .header-actions { display: flex; gap: 8px; }
+
+    .brand-text .name {
+      font-weight: 700;
+      font-size: 15.5px;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-text .sub {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
     .icon-btn {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: var(--card); border: 1px solid var(--border);
-      color: var(--text); display: flex; align-items: center; justify-content: center;
-      font-size: 14px; cursor: pointer;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
     }
+
+    .icon-btn:active {
+      background: var(--card2);
+      border-color: var(--border-light);
+    }
+
     .lvl-badge {
-      display: flex; align-items: center; gap: 4px;
-      background: linear-gradient(135deg, #1a3a5c, #0d2138);
-      border: 1px solid rgba(47,155,255,0.3);
-      color: var(--blue); font-size: 12px; font-weight: 700;
-      padding: 0 10px; height: 36px; border-radius: 10px; cursor: pointer;
-    }
-    .balance-card {
-      margin: 8px 16px; padding: 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-    }
-    .balance-top {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 6px;
-    }
-    .balance-label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-    .tag {
-      font-size: 10px; padding: 3px 8px; border-radius: 6px;
-      background: rgba(255,255,255,0.05); color: var(--muted);
-    }
-    .balance-value {
-      font-size: 32px; font-weight: 800; letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, rgba(26,58,92,0.9), rgba(13,33,56,0.9));
+      border: 1px solid rgba(47,155,255,0.35);
       color: var(--blue);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 0 12px;
+      height: 38px;
+      border-radius: 11px;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(47,155,255,0.12);
     }
-    .balance-value span { font-size: 16px; color: var(--muted); font-weight: 600; margin-left: 4px; }
+
+    /* ===== BALANCE ===== */
+    .balance-card {
+      margin: 6px 16px 0;
+      padding: 18px 18px 16px;
+      background: linear-gradient(160deg, rgba(22,30,42,0.95), rgba(14,20,28,0.98));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(47,155,255,0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .balance-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .balance-label {
+      font-size: 12.5px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .balance-value {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: #fff;
+      position: relative;
+      text-shadow: 0 0 30px rgba(47,155,255,0.25);
+    }
+
+    .balance-value span {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-left: 5px;
+    }
+
+    /* ===== MINING CARD ===== */
     .mining-card {
-      margin: 12px 16px; padding: 16px;
+      margin: 12px 16px 0;
+      padding: 16px 16px 14px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
+      backdrop-filter: blur(12px);
     }
+
     .mining-head {
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 10px;
     }
+
     .mining-title {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 14px; font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
     }
+
     .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
       background: var(--green);
-      box-shadow: 0 0 8px var(--green);
+      box-shadow: 0 0 10px var(--green);
       animation: pulse 2s infinite;
     }
+
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.45; }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
     }
-    .status-text { color: var(--green); font-size: 12px; font-weight: 500; }
+
+    .status-text {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
     .leagues-btn {
-      background: rgba(47,155,255,0.12); border: 1px solid rgba(47,155,255,0.25);
-      color: var(--blue); font-size: 12px; font-weight: 600;
-      padding: 6px 12px; border-radius: 8px; cursor: pointer;
+      background: rgba(47,155,255,0.1);
+      border: 1px solid rgba(47,155,255,0.28);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
+
+    .leagues-btn:active {
+      background: rgba(47,155,255,0.18);
+    }
+
     .pending {
-      font-size: 34px; font-weight: 800; color: var(--green);
-      letter-spacing: -0.5px; margin: 4px 0 10px;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.6px;
+      margin: 2px 0 12px;
+      text-shadow: 0 0 24px var(--green-glow);
+      transition: transform 0.15s ease;
     }
-    .progress-wrap { margin-top: 4px; }
+
+    .pending.bump {
+      transform: scale(1.03);
+    }
+
+    .progress-wrap {
+      margin-top: 2px;
+    }
+
     .progress-bar {
-      height: 5px; background: rgba(255,255,255,0.06);
-      border-radius: 4px; overflow: hidden;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+      overflow: hidden;
     }
+
     .progress-fill {
-      height: 100%; background: linear-gradient(90deg, var(--blue), #60a5fa);
-      border-radius: 4px; transition: width 0.6s ease;
+      height: 100%;
+      background: linear-gradient(90deg, #1a7ae0, #2f9bff, #60a5fa);
+      border-radius: 6px;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 12px rgba(47,155,255,0.4);
     }
+
     .progress-meta {
-      display: flex; justify-content: space-between;
-      font-size: 11px; color: var(--muted); margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 7px;
     }
+
+    /* ===== STATS ===== */
     .stats {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px; margin: 12px 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 9px;
+      margin: 12px 16px 0;
     }
+
     .stat {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 8px; text-align: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 8px;
+      text-align: center;
     }
-    .stat-val { font-size: 18px; font-weight: 700; }
+
+    .stat-val {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
     .stat-val.blue { color: var(--blue); }
     .stat-val.green { color: var(--green); }
     .stat-val.gold { color: var(--gold); }
-    .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ===== HOLD + WALLET ===== */
     .hold-bar {
-      margin: 0 16px 12px; padding: 12px 14px;
-      background: var(--card); border: 1px solid var(--border);
+      margin: 12px 16px 0;
+      padding: 13px 15px;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 14px;
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .hold-label { font-size: 13px; color: var(--muted); }
-    .hold-val { font-size: 14px; font-weight: 700; color: var(--blue); }
-    .claim-wrap { padding: 8px 16px 0; }
-    .btn-primary {
-      width: 100%; height: 52px; border: none; border-radius: 14px;
-      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
-      color: #fff; font-size: 16px; font-weight: 700;
-      cursor: pointer; box-shadow: 0 6px 20px rgba(47,155,255,0.3);
-      transition: transform 0.12s, opacity 0.2s;
+
+    .hold-label {
+      font-size: 13px;
+      color: var(--muted);
     }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-primary:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
-    .page { display: none; padding: 0 0 20px; }
-    .page.active { display: block; }
-    .page-title {
-      font-size: 18px; font-weight: 700; padding: 8px 16px 12px;
+
+    .hold-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
     }
-    .card {
-      margin: 0 16px 12px; padding: 16px;
-      background: var(--card); border: 1px solid var(--border);
+
+    .wallet-card {
+      margin: 10px 16px 0;
+      padding: 14px 15px;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 16px;
     }
-    .ref-code {
-      font-size: 22px; font-weight: 800; color: var(--blue);
-      letter-spacing: 1px; text-align: center; margin: 10px 0;
+
+    .wallet-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
-    .btn-row { display: flex; gap: 8px; margin-top: 10px; }
-    .btn-sec {
-      flex: 1; height: 42px; border-radius: 12px;
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      color: var(--text); font-weight: 600; font-size: 13px; cursor: pointer;
+
+    .wallet-info {
+      min-width: 0;
     }
-    .btn-main {
-      flex: 1; height: 42px; border-radius: 12px; border: none;
-      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
-      color: #fff; font-weight: 700; font-size: 13px; cursor: pointer;
+
+    .wallet-title {
+      font-size: 13.5px;
+      font-weight: 600;
     }
-    .ref-stats {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
-    }
-    .ref-stat {
-      background: var(--card2); border-radius: 12px; padding: 12px; text-align: center;
-    }
-    .ref-stat .n { font-size: 20px; font-weight: 800; }
-    .ref-stat .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .rules-box {
-      margin: 0 16px 12px; padding: 14px;
-      background: rgba(47,155,255,0.06);
-      border: 1px solid rgba(47,155,255,0.15);
-      border-radius: 14px; font-size: 13px; line-height: 1.55; color: var(--muted);
-    }
-    .rules-box b { color: var(--text); }
-    .input-wrap { margin: 0 16px 8px; }
-    .input-wrap label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 6px; }
-    .input-row {
-      display: flex; align-items: center;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 0 12px; height: 48px;
-    }
-    .input-row input {
-      flex: 1; background: transparent; border: none; outline: none;
-      color: var(--text); font-size: 18px; font-weight: 700;
-    }
-    .input-row span { color: var(--muted); font-weight: 600; }
-    .quick-amounts {
-      display: flex; gap: 6px; margin: 8px 16px 12px; flex-wrap: wrap;
-    }
-    .chip {
-      padding: 8px 12px; border-radius: 10px;
-      background: var(--card); border: 1px solid var(--border);
-      color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer;
-    }
-    .need-hold {
-      margin: 0 16px 12px; font-size: 13px; color: var(--gold);
-    }
-    .menu-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-      padding: 0 16px;
-    }
-    .menu-item {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 18px 14px; cursor: pointer;
-      position: relative;
-    }
-    .menu-item .ico { font-size: 26px; margin-bottom: 8px; }
-    .menu-item .t { font-weight: 700; font-size: 14px; }
-    .menu-item .d { font-size: 11px; color: var(--muted); margin-top: 3px; }
-    .badge {
-      position: absolute; top: 10px; right: 10px;
-      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px;
-    }
-    .badge.green { background: rgba(34,197,94,0.15); color: var(--green); }
-    .badge.orange { background: rgba(245,158,11,0.15); color: #f59e0b; }
-    .badge.blue { background: rgba(47,155,255,0.15); color: var(--blue); }
-    .nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(11,15,20,0.95); backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border);
-      display: flex; justify-content: space-around;
-      padding: 8px 0 max(10px, env(safe-area-inset-bottom));
-      max-width: 430px; margin: 0 auto;
-      z-index: 50;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--muted); font-size: 10px; cursor: pointer;
-      min-width: 56px; padding: 4px;
-    }
-    .nav-item.active { color: var(--blue); }
-    .nav-item .ni { font-size: 20px; }
-    .nav-center {
-      width: 48px; height: 48px; border-radius: 14px;
-      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
-      display: flex; align-items: center; justify-content: center;
-      margin-top: -18px; box-shadow: 0 6px 18px rgba(47,155,255,0.35);
-      color: #fff; font-size: 20px;
-    }
-    .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.65);
-      z-index: 100; display: none; align-items: flex-end; justify-content: center;
-    }
-    .modal-bg.show { display: flex; }
-    .modal {
-      width: 100%; max-width: 430px; max-height: 85vh;
-      background: #111820; border-radius: 20px 20px 0 0;
-      padding: 16px 16px 28px; overflow-y: auto;
-      animation: slideUp 0.25s ease;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(40px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .modal-head {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px;
-    }
-    .modal-head h3 { font-size: 16px; }
-    .modal-close {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(255,255,255,0.06); border: none; color: var(--text);
-      font-size: 16px; cursor: pointer;
-    }
-    .tabs {
-      display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
-    }
-    .tab {
-      padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
-      background: rgba(255,255,255,0.05); color: var(--muted); cursor: pointer;
-      border: none;
-    }
-    .tab.active { background: var(--blue); color: #fff; }
-    .lvl-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
-    }
-    .lvl-row.current { color: var(--blue); font-weight: 700; }
-    .info-text { font-size: 13px; line-height: 1.6; color: var(--muted); }
-    .info-text li { margin-bottom: 8px; }
-    .info-text b { color: var(--text); }
-    .toast {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: #1a2330; border: 1px solid var(--border);
-      color: var(--text); padding: 10px 18px; border-radius: 12px;
-      font-size: 13px; font-weight: 600; z-index: 200;
-      opacity: 0; transition: opacity 0.25s; pointer-events: none;
+
+    .wallet-addr {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .toast.show { opacity: 1; }
-    .toast.ok { border-color: rgba(34,197,94,0.4); color: var(--green); }
-    .muted { color: var(--muted); font-size: 12px; text-align: center; margin: 8px 16px; }
 
-    /* ===== STREAK STYLES ===== */
-    .streak-hero {
-      margin: 0 16px 14px; padding: 18px;
-      background: linear-gradient(145deg, #121820, #0f1720);
-      border: 1px solid rgba(47,155,255,0.2);
-      border-radius: 18px;
+    .btn-wallet {
+      flex: 0 0 auto;
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
+      color: #fff;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--blue-glow);
+    }
+
+    .btn-wallet:active {
+      transform: scale(0.97);
+    }
+
+    /* ===== BUTTONS ===== */
+    .claim-wrap {
+      padding: 14px 16px 0;
+    }
+
+    .btn-primary {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 24px var(--blue-glow);
+      transition: transform 0.12s, opacity 0.2s, box-shadow 0.2s;
+      letter-spacing: -0.2px;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.42;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    /* ===== PAGES ===== */
+    .page {
+      display: none;
+      padding: 0 0 24px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-title {
+      font-size: 19px;
+      font-weight: 700;
+      padding: 10px 16px 14px;
+      letter-spacing: -0.3px;
+    }
+
+    .card {
+      margin: 0 16px 12px;
+      padding: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12.5px;
       text-align: center;
+      margin: 10px 16px 0;
+      line-height: 1.45;
     }
+
+    /* ===== MENU ===== */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      padding: 0 16px;
+    }
+
+    .menu-item {
+      background: linear-gradient(160deg, rgba(22,30,42,0.95), rgba(16,22,30,0.98));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 14px 16px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .menu-item:active {
+      transform: scale(0.97);
+      border-color: var(--border-light);
+    }
+
+    .menu-item .ico {
+      font-size: 28px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .menu-item .t {
+      font-weight: 700;
+      font-size: 14.5px;
+      letter-spacing: -0.2px;
+    }
+
+    .menu-item .d {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 7px;
+    }
+
+    .badge.green {
+      background: rgba(34,197,94,0.15);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+
+    .badge.orange {
+      background: rgba(245,158,11,0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245,158,11,0.25);
+    }
+
+    .badge.blue {
+      background: rgba(47,155,255,0.15);
+      color: var(--blue);
+      border: 1px solid rgba(47,155,255,0.25);
+    }
+
+    /* ===== STREAK ===== */
+    .streak-hero {
+      margin: 0 16px 14px;
+      padding: 22px 18px 18px;
+      background: linear-gradient(165deg, rgba(20,28,40,0.98), rgba(12,18,26,0.99));
+      border: 1px solid rgba(47,155,255,0.22);
+      border-radius: 22px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    .streak-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(47,155,255,0.18), transparent 65%);
+      pointer-events: none;
+    }
+
     .streak-day {
-      font-size: 42px; font-weight: 800; color: var(--blue);
+      font-size: 48px;
+      font-weight: 800;
+      color: #fff;
       line-height: 1;
+      position: relative;
+      text-shadow: 0 0 40px rgba(47,155,255,0.35);
     }
-    .streak-day span { font-size: 16px; color: var(--muted); font-weight: 600; }
-    .streak-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    .streak-day span {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .streak-label {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      position: relative;
+    }
+
     .streak-reward-box {
-      margin-top: 14px; padding: 12px;
-      background: rgba(47,155,255,0.08);
-      border-radius: 12px;
-      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
     }
-    .streak-reward-label { font-size: 12px; color: var(--muted); }
-    .streak-reward-val { font-size: 20px; font-weight: 800; color: var(--gold); }
+
+    .streak-reward-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .streak-reward-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+      text-shadow: 0 0 18px var(--gold-glow);
+      margin-top: 2px;
+    }
+
     .streak-calendar {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
+      gap: 7px;
       margin: 0 16px 16px;
     }
+
     .day-cell {
       aspect-ratio: 1;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       font-size: 11px;
-      position: relative;
+      transition: all 0.2s;
     }
+
     .day-cell.done {
       background: rgba(34,197,94,0.12);
-      border-color: rgba(34,197,94,0.3);
+      border-color: rgba(34,197,94,0.35);
       color: var(--green);
+      box-shadow: 0 0 12px rgba(34,197,94,0.12);
     }
+
     .day-cell.current {
       background: rgba(47,155,255,0.15);
       border-color: var(--blue);
       color: var(--blue);
       font-weight: 700;
+      box-shadow: 0 0 16px rgba(47,155,255,0.2);
     }
-    .day-cell .d-num { font-weight: 700; font-size: 13px; }
-    .day-cell .d-rew { font-size: 9px; color: var(--muted); margin-top: 1px; }
-    .day-cell.done .d-rew { color: var(--green); }
-    .day-cell.current .d-rew { color: var(--blue); }
+
+    .day-cell .d-num {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .day-cell .d-rew {
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .day-cell.done .d-rew {
+      color: var(--green);
+    }
+
+    .day-cell.current .d-rew {
+      color: var(--blue);
+    }
+
+    /* ===== FRIENDS ===== */
+    .ref-code {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 1.5px;
+      text-align: center;
+      margin: 12px 0;
+      text-shadow: 0 0 20px var(--blue-glow);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .btn-sec {
+      flex: 1;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+
+    .btn-sec:active {
+      background: rgba(255,255,255,0.07);
+    }
+
+    .btn-main {
+      flex: 1;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px var(--blue-glow);
+    }
+
+    .ref-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .ref-stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .ref-stat .n {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .ref-stat .l {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ===== WITHDRAW ===== */
+    .rules-box {
+      margin: 0 16px 14px;
+      padding: 15px;
+      background: rgba(47,155,255,0.06);
+      border: 1px solid rgba(47,155,255,0.18);
+      border-radius: 15px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .rules-box b {
+      color: var(--text);
+    }
+
+    .input-wrap {
+      margin: 0 16px 8px;
+    }
+
+    .input-wrap label {
+      font-size: 12.5px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 0 14px;
+      height: 50px;
+    }
+
+    .input-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .input-row span {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .quick-amounts {
+      display: flex;
+      gap: 7px;
+      margin: 10px 16px 12px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 9px 13px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .chip:active {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .need-hold {
+      margin: 0 16px 14px;
+      font-size: 13px;
+      color: var(--gold);
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(7,11,16,0.92);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 max(12px, env(safe-area-inset-bottom));
+      max-width: 430px;
+      margin: 0 auto;
+      z-index: 50;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 10.5px;
+      cursor: pointer;
+      min-width: 56px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      color: var(--blue);
+    }
+
+    .nav-item .ni {
+      font-size: 21px;
+    }
+
+    .nav-center {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -20px;
+      box-shadow: 0 6px 22px var(--blue-glow);
+      color: #fff;
+      font-size: 20px;
+    }
+
+    /* ===== MODALS ===== */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-bg.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 430px;
+      max-height: 85vh;
+      background: #0e141c;
+      border-radius: 22px 22px 0 0;
+      padding: 18px 18px 30px;
+      overflow-y: auto;
+      animation: slideUp 0.28s ease;
+      border-top: 1px solid var(--border);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-head h3 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 8px 13px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .tab.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .lvl-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+
+    .lvl-row.current {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .info-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .info-text li {
+      margin-bottom: 9px;
+    }
+
+    .info-text b {
+      color: var(--text);
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #151d28;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 11px 20px;
+      border-radius: 13px;
+      font-size: 13.5px;
+      font-weight: 600;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.25s;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .toast.ok {
+      border-color: rgba(34,197,94,0.4);
+      color: var(--green);
+    }
+
+    /* Shop */
+    .shop-rate {
+      text-align: center;
+      padding: 18px 0 8px;
+    }
+
+    .shop-rate .big {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .shop-rate .src {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -437,13 +1094,13 @@
         <span class="hold-val" id="wallet-hold">0 BTX</span>
       </div>
 
-      <div class="card" style="margin:0 16px 12px;" id="wallet-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-          <div style="min-width:0;">
-            <div style="font-size:13px;font-weight:600;" id="wallet-title">TON-кошелёк не подключён</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;" id="wallet-addr">Подключи, чтобы уровень считался от холда</div>
+      <div class="wallet-card" id="wallet-card">
+        <div class="wallet-inner">
+          <div class="wallet-info">
+            <div class="wallet-title" id="wallet-title">TON-кошелёк не подключён</div>
+            <div class="wallet-addr" id="wallet-addr">Подключи, чтобы уровень считался от холда</div>
           </div>
-          <button class="btn-main" style="flex:0 0 auto;padding:0 14px;height:38px;" id="wallet-btn" onclick="toggleWallet()">Подключить</button>
+          <button class="btn-wallet" id="wallet-btn" onclick="toggleWallet()">Подключить</button>
         </div>
       </div>
 
@@ -457,11 +1114,14 @@
     <div class="page" id="page-shop">
       <div class="page-title">Магазин</div>
       <div class="card">
-        <div style="text-align:center;padding:12px 0;">
-          <div style="font-size:28px;font-weight:800;color:var(--blue);">1 BTX ≈ — TON</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Источник: STON.fi · скоро</div>
+        <div class="shop-rate">
+          <div class="big">1 BTX ≈ — TON</div>
+          <div class="src">Источник: STON.fi · скоро</div>
         </div>
         <button class="btn-primary" onclick="showToast('Покупка через STON.fi — скоро')">Купить BTX</button>
+      </div>
+      <div class="card">
+        <div style="font-size:13.5px;color:var(--muted);text-align:center;">История пополнений пуста</div>
       </div>
     </div>
 
@@ -510,16 +1170,16 @@
           </div>
           <div style="text-align:right;">
             <div class="streak-reward-label">Всего собрано</div>
-            <div style="font-size:15px;font-weight:700;color:var(--text);" id="streak-total">0</div>
+            <div style="font-size:16px;font-weight:700;color:var(--text);margin-top:2px;" id="streak-total">0</div>
           </div>
         </div>
       </div>
 
-      <div class="claim-wrap" style="margin-bottom:16px;">
+      <div class="claim-wrap" style="margin-bottom:18px;">
         <button class="btn-primary" id="streak-claim-btn" onclick="claimStreak()">Забрать награду</button>
       </div>
 
-      <div style="padding:0 16px 8px;font-size:13px;font-weight:600;color:var(--muted);">План на 30 дней</div>
+      <div style="padding:0 16px 10px;font-size:13.5px;font-weight:600;color:var(--muted);">План на 30 дней</div>
       <div class="streak-calendar" id="streak-calendar"></div>
 
       <p class="muted">Заходите каждый день, чтобы не потерять серию</p>
@@ -529,10 +1189,10 @@
     <div class="page" id="page-friends">
       <div class="page-title">Друзья</div>
       <div class="card">
-        <div style="font-size:13px;color:var(--muted);text-align:center;margin-bottom:4px;">
+        <div style="font-size:13.5px;color:var(--muted);text-align:center;margin-bottom:6px;line-height:1.45;">
           Приглашай друзей и получай <b style="color:var(--gold)">5%</b> от их сборов навсегда
         </div>
-        <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px;">Ваша реферальная ссылка</div>
+        <div style="font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:4px;">Ваша реферальная ссылка</div>
         <div class="ref-code" id="ref-code">—</div>
         <div class="btn-row">
           <button class="btn-sec" onclick="copyRef()">Копировать</button>
@@ -550,8 +1210,8 @@
         </div>
       </div>
       <div class="card">
-        <div style="font-size:12px;color:var(--muted);line-height:1.5;">
-          <b style="color:var(--text)">Условие активности:</b> друг считается активным при достижении Уровня 2 (холд от 150 BTX).
+        <div style="font-size:13px;color:var(--muted);line-height:1.55;">
+          <b style="color:var(--text)">Условие активности:</b> друг считается активным при достижении Уровня 2 (холд от 150 BTX на кошельке). Награда 5% начисляется в момент сбора наград активным другом.
         </div>
       </div>
     </div>
@@ -582,9 +1242,9 @@
       <div class="claim-wrap">
         <button class="btn-primary" onclick="requestWithdraw()">Вывести на кошелёк</button>
       </div>
-      <div class="card" style="margin-top:12px;">
-        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">История выводов</div>
-        <div id="withdraw-history"><div class="muted">История выводов пуста</div></div>
+      <div class="card" style="margin-top:14px;">
+        <div style="font-size:13.5px;font-weight:600;margin-bottom:10px;">История выводов</div>
+        <div id="withdraw-history"><div class="muted" style="margin:0;">История выводов пуста</div></div>
       </div>
       <p class="muted">Вывод обрабатывается вручную до 24 часов</p>
     </div>
@@ -616,20 +1276,21 @@
         <h3>Система уровней</h3>
         <button class="modal-close" onclick="closeLevels()">✕</button>
       </div>
-      <div class="info-text" style="margin-bottom:12px;">
-        Уровень зависит <b>только</b> от холда BTX на TON-кошельке.
+      <div class="info-text" style="margin-bottom:14px;">
+        Уровень и буст зависят <b>только</b> от количества BTX на подключённом TON-кошельке.
+        Баланс внутри приложения на уровень <b>не влияет</b>.
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:10px;">
         <span>Текущий уровень</span><b id="m-lvl">1</b>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:10px;">
         <span>Холд на кошельке</span><b id="m-hold" style="color:var(--blue)">0 BTX</b>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:16px;">
         <span>Множитель</span><b id="m-boost" style="color:var(--green)">×1.00</b>
       </div>
       <div id="levels-body"></div>
-      <button class="btn-primary" style="margin-top:16px;" onclick="closeLevels()">Понятно</button>
+      <button class="btn-primary" style="margin-top:18px;" onclick="closeLevels()">Понятно</button>
     </div>
   </div>
 
@@ -648,16 +1309,18 @@
         <ul style="padding-left:18px;">
           <li><b>Майнинг 24/7</b> — начисление идёт на сервере даже когда приложение закрыто.</li>
           <li><b>Уровень</b> зависит только от холда BTX на вашем TON-кошельке.</li>
-          <li><b>Вывод:</b> мин. 10 000 BTX, комиссия 5%, холд 25%, 1 заявка / 24ч.</li>
-          <li><b>Рефералы:</b> 5% от сборов приглашённых друзей.</li>
+          <li><b>Баланс в приложении</b> не влияет на уровень и скорость.</li>
+          <li><b>Вывод:</b> мин. 10 000 BTX, комиссия 5%, холд 25% от суммы, 1 заявка / 24ч.</li>
+          <li><b>Рефералы:</b> 5% от сборов приглашённых друзей навсегда.</li>
           <li><b>Daily Streak:</b> заходите каждый день и получайте растущую награду.</li>
         </ul>
       </div>
       <div id="tab-about" class="info-text" style="display:none;">
         <p><b>BitneX</b> — Web3 mining-приложение в экосистеме TON.</p>
-        <p style="margin-top:10px;">Сеть: <b>TON</b> · Стандарт: <b>Jetton</b></p>
+        <p style="margin-top:12px;">Непрерывный майнинг, уровни от холда, реферальная программа и вывод на кошелёк.</p>
+        <p style="margin-top:12px;">Сеть: <b>TON</b> · Стандарт: <b>Jetton</b></p>
       </div>
-      <button class="btn-primary" style="margin-top:16px;" onclick="closeRules()">Закрыть</button>
+      <button class="btn-primary" style="margin-top:18px;" onclick="closeRules()">Закрыть</button>
     </div>
   </div>
 
@@ -668,8 +1331,8 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      tg.setHeaderColor('#0b0f14');
-      tg.setBackgroundColor('#0b0f14');
+      tg.setHeaderColor('#070b10');
+      tg.setBackgroundColor('#070b10');
     }
 
     const API = 'https://bitnex-backend-production.up.railway.app';
@@ -756,7 +1419,6 @@
       const btn = document.getElementById('claim-btn');
       if (btn) btn.disabled = pending < 0.0001 || claiming;
 
-      // Streak UI
       updateStreakUI();
     }
 
@@ -780,7 +1442,6 @@
         claimBtn.textContent = 'Забрать +' + nextReward + ' BTX';
       }
 
-      // Calendar
       const cal = document.getElementById('streak-calendar');
       if (!cal) return;
       let html = '';
@@ -820,7 +1481,6 @@
       if (data.ref_code) document.getElementById('ref-code').textContent = data.ref_code;
       if (data.wallet_address) walletAddress = data.wallet_address;
 
-      // Streak
       if (data.streak_count != null) streakCount = Number(data.streak_count);
       if (data.claimed_today != null) claimedToday = !!data.claimed_today;
       if (data.next_reward != null) nextReward = Number(data.next_reward);
@@ -925,12 +1585,16 @@
       }
     }
 
-    // Local pending tick
     setInterval(() => {
       const perSec = (hourlyRate * boost) / 3600;
       pending += perSec;
       const el = document.getElementById('pending-earn');
-      if (el) el.textContent = '+' + pending.toFixed(4) + ' BTX';
+      if (el) {
+        el.textContent = '+' + pending.toFixed(4) + ' BTX';
+        el.classList.remove('bump');
+        void el.offsetWidth;
+        el.classList.add('bump');
+      }
       const btn = document.getElementById('claim-btn');
       if (btn && !claiming) btn.disabled = pending < 0.0001;
     }, 1000);
@@ -1018,24 +1682,30 @@
       ).join('');
       document.getElementById('levels-modal').classList.add('show');
     }
+
     function closeLevels() {
       document.getElementById('levels-modal').classList.remove('show');
     }
+
     function openRules() {
       document.getElementById('rules-modal').classList.add('show');
     }
+
     function closeRules() {
       document.getElementById('rules-modal').classList.remove('show');
     }
+
     function switchTab(name) {
       document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
       document.getElementById('tab-rules').style.display = name === 'rules' ? 'block' : 'none';
       document.getElementById('tab-about').style.display = name === 'about' ? 'block' : 'none';
     }
+
     function setWithdraw(v) {
       document.getElementById('withdraw-amount').value = v;
       updateUI();
     }
+
     document.getElementById('withdraw-amount')?.addEventListener('input', updateUI);
 
     async function requestWithdraw() {
@@ -1070,13 +1740,13 @@
         const list = data.withdrawals || [];
         const box = document.getElementById('withdraw-history');
         if (!list.length) {
-          box.innerHTML = '<div class="muted">История выводов пуста</div>';
+          box.innerHTML = '<div class="muted" style="margin:0;">История выводов пуста</div>';
           return;
         }
         box.innerHTML = list.map(w => {
           const st = w.status === 'paid' ? 'Выплачено' : w.status === 'rejected' ? 'Отклонено' : 'В обработке';
           const col = w.status === 'paid' ? 'var(--green)' : w.status === 'rejected' ? 'var(--danger)' : 'var(--gold)';
-          return `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;">
+          return `<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13.5px;">
             <span>${Number(w.amount).toLocaleString('ru-RU')} BTX</span>
             <span style="color:${col}">${st}</span>
           </div>`;
@@ -1089,6 +1759,7 @@
       const link = 'https://t.me/BitneXMining_bot?start=' + code;
       navigator.clipboard?.writeText(link).then(() => showToast('Ссылка скопирована', true));
     }
+
     function shareRef() {
       const code = document.getElementById('ref-code').textContent;
       const link = 'https://t.me/BitneXMining_bot?start=' + code;
