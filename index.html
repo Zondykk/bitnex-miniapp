@@ -19,6 +19,7 @@
       --green: #22c55e;
       --gold: #f5c518;
       --danger: #ef4444;
+      --purple: #a855f7;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
@@ -30,8 +31,6 @@
       padding-bottom: 88px;
     }
     .app { max-width: 430px; margin: 0 auto; }
-
-    /* Header */
     .header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 16px 8px;
@@ -60,8 +59,6 @@
       color: var(--blue); font-size: 12px; font-weight: 700;
       padding: 0 10px; height: 36px; border-radius: 10px; cursor: pointer;
     }
-
-    /* Balance card */
     .balance-card {
       margin: 8px 16px; padding: 16px;
       background: var(--card);
@@ -82,14 +79,11 @@
       color: var(--blue);
     }
     .balance-value span { font-size: 16px; color: var(--muted); font-weight: 600; margin-left: 4px; }
-
-    /* Mining card */
     .mining-card {
       margin: 12px 16px; padding: 16px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
-      position: relative;
     }
     .mining-head {
       display: flex; justify-content: space-between; align-items: center;
@@ -118,9 +112,7 @@
     .pending {
       font-size: 34px; font-weight: 800; color: var(--green);
       letter-spacing: -0.5px; margin: 4px 0 10px;
-      transition: transform 0.15s ease;
     }
-    .pending.bump { transform: scale(1.04); }
     .progress-wrap { margin-top: 4px; }
     .progress-bar {
       height: 5px; background: rgba(255,255,255,0.06);
@@ -134,8 +126,6 @@
       display: flex; justify-content: space-between;
       font-size: 11px; color: var(--muted); margin-top: 6px;
     }
-
-    /* Stats row */
     .stats {
       display: grid; grid-template-columns: 1fr 1fr 1fr;
       gap: 8px; margin: 12px 16px;
@@ -149,8 +139,6 @@
     .stat-val.green { color: var(--green); }
     .stat-val.gold { color: var(--gold); }
     .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    /* Hold bar */
     .hold-bar {
       margin: 0 16px 12px; padding: 12px 14px;
       background: var(--card); border: 1px solid var(--border);
@@ -159,8 +147,6 @@
     }
     .hold-label { font-size: 13px; color: var(--muted); }
     .hold-val { font-size: 14px; font-weight: 700; color: var(--blue); }
-
-    /* Claim */
     .claim-wrap { padding: 8px 16px 0; }
     .btn-primary {
       width: 100%; height: 52px; border: none; border-radius: 14px;
@@ -171,15 +157,11 @@
     }
     .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
-
-    /* Tabs content */
     .page { display: none; padding: 0 0 20px; }
     .page.active { display: block; }
     .page-title {
       font-size: 18px; font-weight: 700; padding: 8px 16px 12px;
     }
-
-    /* Friends */
     .card {
       margin: 0 16px 12px; padding: 16px;
       background: var(--card); border: 1px solid var(--border);
@@ -208,8 +190,6 @@
     }
     .ref-stat .n { font-size: 20px; font-weight: 800; }
     .ref-stat .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    /* Withdraw */
     .rules-box {
       margin: 0 16px 12px; padding: 14px;
       background: rgba(47,155,255,0.06);
@@ -237,19 +217,9 @@
       background: var(--card); border: 1px solid var(--border);
       color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer;
     }
-    .chip:active { border-color: var(--blue); color: var(--blue); }
     .need-hold {
       margin: 0 16px 12px; font-size: 13px; color: var(--gold);
     }
-
-    /* Shop */
-    .shop-rate {
-      text-align: center; padding: 20px 16px;
-    }
-    .shop-rate .big { font-size: 28px; font-weight: 800; color: var(--blue); }
-    .shop-rate .src { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-    /* Menu grid */
     .menu-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
       padding: 0 16px;
@@ -269,8 +239,6 @@
     .badge.green { background: rgba(34,197,94,0.15); color: var(--green); }
     .badge.orange { background: rgba(245,158,11,0.15); color: #f59e0b; }
     .badge.blue { background: rgba(47,155,255,0.15); color: var(--blue); }
-
-    /* Bottom nav */
     .nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: rgba(11,15,20,0.95); backdrop-filter: blur(12px);
@@ -294,8 +262,6 @@
       margin-top: -18px; box-shadow: 0 6px 18px rgba(47,155,255,0.35);
       color: #fff; font-size: 20px;
     }
-
-    /* Modal */
     .modal-bg {
       position: fixed; inset: 0; background: rgba(0,0,0,0.65);
       z-index: 100; display: none; align-items: flex-end; justify-content: center;
@@ -338,8 +304,6 @@
     .info-text { font-size: 13px; line-height: 1.6; color: var(--muted); }
     .info-text li { margin-bottom: 8px; }
     .info-text b { color: var(--text); }
-
-    /* Toast */
     .toast {
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
       background: #1a2330; border: 1px solid var(--border);
@@ -350,8 +314,61 @@
     }
     .toast.show { opacity: 1; }
     .toast.ok { border-color: rgba(34,197,94,0.4); color: var(--green); }
-
     .muted { color: var(--muted); font-size: 12px; text-align: center; margin: 8px 16px; }
+
+    /* ===== STREAK STYLES ===== */
+    .streak-hero {
+      margin: 0 16px 14px; padding: 18px;
+      background: linear-gradient(145deg, #121820, #0f1720);
+      border: 1px solid rgba(47,155,255,0.2);
+      border-radius: 18px;
+      text-align: center;
+    }
+    .streak-day {
+      font-size: 42px; font-weight: 800; color: var(--blue);
+      line-height: 1;
+    }
+    .streak-day span { font-size: 16px; color: var(--muted); font-weight: 600; }
+    .streak-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .streak-reward-box {
+      margin-top: 14px; padding: 12px;
+      background: rgba(47,155,255,0.08);
+      border-radius: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .streak-reward-label { font-size: 12px; color: var(--muted); }
+    .streak-reward-val { font-size: 20px; font-weight: 800; color: var(--gold); }
+    .streak-calendar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 0 16px 16px;
+    }
+    .day-cell {
+      aspect-ratio: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 11px;
+      position: relative;
+    }
+    .day-cell.done {
+      background: rgba(34,197,94,0.12);
+      border-color: rgba(34,197,94,0.3);
+      color: var(--green);
+    }
+    .day-cell.current {
+      background: rgba(47,155,255,0.15);
+      border-color: var(--blue);
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .day-cell .d-num { font-weight: 700; font-size: 13px; }
+    .day-cell .d-rew { font-size: 9px; color: var(--muted); margin-top: 1px; }
+    .day-cell.done .d-rew { color: var(--green); }
+    .day-cell.current .d-rew { color: var(--blue); }
   </style>
 </head>
 <body>
@@ -440,14 +457,11 @@
     <div class="page" id="page-shop">
       <div class="page-title">Магазин</div>
       <div class="card">
-        <div class="shop-rate">
-          <div class="big">1 BTX ≈ — TON</div>
-          <div class="src">Источник: STON.fi · скоро</div>
+        <div style="text-align:center;padding:12px 0;">
+          <div style="font-size:28px;font-weight:800;color:var(--blue);">1 BTX ≈ — TON</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Источник: STON.fi · скоро</div>
         </div>
         <button class="btn-primary" onclick="showToast('Покупка через STON.fi — скоро')">Купить BTX</button>
-      </div>
-      <div class="card">
-        <div style="font-size:13px;color:var(--muted);text-align:center;">История пополнений пуста</div>
       </div>
     </div>
 
@@ -461,11 +475,11 @@
           <div class="t">Стейкинг</div>
           <div class="d">Доход до +35% APY</div>
         </div>
-        <div class="menu-item" onclick="showToast('Задания скоро')">
+        <div class="menu-item" onclick="go('streak')">
           <span class="badge green">NEW</span>
-          <div class="ico">📋</div>
-          <div class="t">Задания</div>
-          <div class="d">Стрик и награды</div>
+          <div class="ico">🔥</div>
+          <div class="t">Daily Streak</div>
+          <div class="d">Ежедневные награды</div>
         </div>
         <div class="menu-item" onclick="showToast('Ambassador скоро')">
           <div class="ico">👑</div>
@@ -481,6 +495,36 @@
       </div>
     </div>
 
+    <!-- PAGE: STREAK -->
+    <div class="page" id="page-streak">
+      <div class="page-title">🔥 Daily Streak</div>
+
+      <div class="streak-hero">
+        <div class="streak-day"><span id="streak-current">0</span> <span>/ 30</span></div>
+        <div class="streak-label">дней подряд</div>
+
+        <div class="streak-reward-box">
+          <div>
+            <div class="streak-reward-label" id="streak-reward-label">Награда сегодня</div>
+            <div class="streak-reward-val" id="streak-reward-val">— BTX</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="streak-reward-label">Всего собрано</div>
+            <div style="font-size:15px;font-weight:700;color:var(--text);" id="streak-total">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="claim-wrap" style="margin-bottom:16px;">
+        <button class="btn-primary" id="streak-claim-btn" onclick="claimStreak()">Забрать награду</button>
+      </div>
+
+      <div style="padding:0 16px 8px;font-size:13px;font-weight:600;color:var(--muted);">План на 30 дней</div>
+      <div class="streak-calendar" id="streak-calendar"></div>
+
+      <p class="muted">Заходите каждый день, чтобы не потерять серию</p>
+    </div>
+
     <!-- PAGE: FRIENDS -->
     <div class="page" id="page-friends">
       <div class="page-title">Друзья</div>
@@ -488,9 +532,7 @@
         <div style="font-size:13px;color:var(--muted);text-align:center;margin-bottom:4px;">
           Приглашай друзей и получай <b style="color:var(--gold)">5%</b> от их сборов навсегда
         </div>
-        <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px;">
-          Ваша реферальная ссылка
-        </div>
+        <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px;">Ваша реферальная ссылка</div>
         <div class="ref-code" id="ref-code">—</div>
         <div class="btn-row">
           <button class="btn-sec" onclick="copyRef()">Копировать</button>
@@ -509,7 +551,7 @@
       </div>
       <div class="card">
         <div style="font-size:12px;color:var(--muted);line-height:1.5;">
-          <b style="color:var(--text)">Условие активности:</b> друг считается активным при достижении Уровня 2 (холд от 150 BTX на кошельке). Награда 5% начисляется в момент сбора наград активным другом.
+          <b style="color:var(--text)">Условие активности:</b> друг считается активным при достижении Уровня 2 (холд от 150 BTX).
         </div>
       </div>
     </div>
@@ -575,8 +617,7 @@
         <button class="modal-close" onclick="closeLevels()">✕</button>
       </div>
       <div class="info-text" style="margin-bottom:12px;">
-        Уровень и буст зависят <b>только</b> от количества BTX на подключённом TON-кошельке.
-        Баланс внутри приложения на уровень <b>не влияет</b>.
+        Уровень зависит <b>только</b> от холда BTX на TON-кошельке.
       </div>
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;">
         <span>Текущий уровень</span><b id="m-lvl">1</b>
@@ -607,14 +648,13 @@
         <ul style="padding-left:18px;">
           <li><b>Майнинг 24/7</b> — начисление идёт на сервере даже когда приложение закрыто.</li>
           <li><b>Уровень</b> зависит только от холда BTX на вашем TON-кошельке.</li>
-          <li><b>Баланс в приложении</b> не влияет на уровень и скорость.</li>
-          <li><b>Вывод:</b> мин. 10 000 BTX, комиссия 5%, холд 25% от суммы, 1 заявка / 24ч.</li>
-          <li><b>Рефералы:</b> 5% от сборов приглашённых друзей навсегда.</li>
+          <li><b>Вывод:</b> мин. 10 000 BTX, комиссия 5%, холд 25%, 1 заявка / 24ч.</li>
+          <li><b>Рефералы:</b> 5% от сборов приглашённых друзей.</li>
+          <li><b>Daily Streak:</b> заходите каждый день и получайте растущую награду.</li>
         </ul>
       </div>
       <div id="tab-about" class="info-text" style="display:none;">
         <p><b>BitneX</b> — Web3 mining-приложение в экосистеме TON.</p>
-        <p style="margin-top:10px;">Непрерывный майнинг, уровни от холда, реферальная программа и вывод на кошелёк.</p>
         <p style="margin-top:10px;">Сеть: <b>TON</b> · Стандарт: <b>Jetton</b></p>
       </div>
       <button class="btn-primary" style="margin-top:16px;" onclick="closeRules()">Закрыть</button>
@@ -648,6 +688,15 @@
       { level: 8, hold: 40000, rate: 200, boost: 10.0 },
     ];
 
+    const STREAK_REWARDS = [
+      25, 35, 50, 70, 90,
+      110, 130, 160, 190, 220,
+      250, 280, 320, 360, 400,
+      450, 500, 560, 620, 700,
+      780, 860, 950, 1050, 1150,
+      1250, 1400, 1550, 1700, 2000
+    ];
+
     let appBalance = 0;
     let pending = 0;
     let walletHold = 0;
@@ -657,15 +706,21 @@
     let currentLevel = 1;
     let refCount = 0;
     let refEarned = 0;
-    let lastServerSync = Date.now();
     let claiming = false;
     let tonConnectUI = null;
+
+    // Streak state
+    let streakCount = 0;
+    let claimedToday = false;
+    let nextReward = 25;
+    let totalStreakClaimed = 0;
 
     function getLevelInfo(hold) {
       let lvl = LEVELS[0];
       for (const l of LEVELS) if (hold >= l.hold) lvl = l;
       return lvl;
     }
+
     function nextLevel() {
       return LEVELS.find(l => l.level === currentLevel + 1) || null;
     }
@@ -699,7 +754,49 @@
       document.getElementById('need-hold').textContent = 'Нужно холда: ' + Math.ceil(amt * 0.25).toLocaleString('ru-RU') + ' BTX';
 
       const btn = document.getElementById('claim-btn');
-      btn.disabled = pending < 0.0001 || claiming;
+      if (btn) btn.disabled = pending < 0.0001 || claiming;
+
+      // Streak UI
+      updateStreakUI();
+    }
+
+    function updateStreakUI() {
+      document.getElementById('streak-current').textContent = streakCount;
+      document.getElementById('streak-total').textContent = totalStreakClaimed.toLocaleString('ru-RU');
+
+      const rewardLabel = document.getElementById('streak-reward-label');
+      const rewardVal = document.getElementById('streak-reward-val');
+      const claimBtn = document.getElementById('streak-claim-btn');
+
+      if (claimedToday) {
+        rewardLabel.textContent = 'Уже получено сегодня';
+        rewardVal.textContent = 'Завтра +' + nextReward + ' BTX';
+        claimBtn.disabled = true;
+        claimBtn.textContent = 'Приходите завтра';
+      } else {
+        rewardLabel.textContent = 'Награда сегодня';
+        rewardVal.textContent = '+' + nextReward + ' BTX';
+        claimBtn.disabled = false;
+        claimBtn.textContent = 'Забрать +' + nextReward + ' BTX';
+      }
+
+      // Calendar
+      const cal = document.getElementById('streak-calendar');
+      if (!cal) return;
+      let html = '';
+      for (let i = 1; i <= 30; i++) {
+        let cls = 'day-cell';
+        if (i < streakCount || (i === streakCount && claimedToday)) cls += ' done';
+        if (i === streakCount + (claimedToday ? 1 : 0) && !claimedToday) cls += ' current';
+        if (i === streakCount && claimedToday) cls += ' current';
+
+        const rew = STREAK_REWARDS[i - 1] || 2000;
+        html += `<div class="${cls}">
+          <div class="d-num">${i}</div>
+          <div class="d-rew">${rew}</div>
+        </div>`;
+      }
+      cal.innerHTML = html;
     }
 
     function applyServerData(data) {
@@ -709,6 +806,7 @@
       walletHold = Number(data.wallet_hold) || 0;
       refCount = data.referrals?.count || 0;
       refEarned = Number(data.referrals?.earned) || 0;
+
       if (data.rate != null) hourlyRate = Number(data.rate);
       if (data.boost != null) boost = Number(data.boost);
       if (data.level != null) currentLevel = Number(data.level);
@@ -718,11 +816,16 @@
         hourlyRate = lvl.rate;
         boost = lvl.boost;
       }
+
       if (data.ref_code) document.getElementById('ref-code').textContent = data.ref_code;
-      if (data.wallet_address) {
-        walletAddress = data.wallet_address;
-      }
-      lastServerSync = Date.now();
+      if (data.wallet_address) walletAddress = data.wallet_address;
+
+      // Streak
+      if (data.streak_count != null) streakCount = Number(data.streak_count);
+      if (data.claimed_today != null) claimedToday = !!data.claimed_today;
+      if (data.next_reward != null) nextReward = Number(data.next_reward);
+      if (data.total_streak_claimed != null) totalStreakClaimed = Number(data.total_streak_claimed);
+
       updateWalletUI();
       updateUI();
     }
@@ -752,7 +855,6 @@
         return;
       }
       if (!tonConnectUI) {
-        // fallback: ручной ввод адреса
         const a = prompt('Вставь адрес TON-кошелька (UQ… / EQ…)');
         if (!a || a.length < 20) return;
         await saveWallet(a.trim());
@@ -761,7 +863,6 @@
       try {
         await tonConnectUI.openModal();
       } catch (e) {
-        console.error(e);
         const a = prompt('Вставь адрес TON-кошелька (UQ… / EQ…)');
         if (!a || a.length < 20) return;
         await saveWallet(a.trim());
@@ -820,25 +921,20 @@
         applyServerData(data);
         return data;
       } catch (e) {
-        console.error(e);
         return null;
       }
     }
 
-    // Плавный локальный тик pending (как в LootVault), сервер — источник истины
+    // Local pending tick
     setInterval(() => {
       const perSec = (hourlyRate * boost) / 3600;
       pending += perSec;
       const el = document.getElementById('pending-earn');
-      el.textContent = '+' + pending.toFixed(4) + ' BTX';
-      el.classList.remove('bump');
-      void el.offsetWidth;
-      el.classList.add('bump');
+      if (el) el.textContent = '+' + pending.toFixed(4) + ' BTX';
       const btn = document.getElementById('claim-btn');
       if (btn && !claiming) btn.disabled = pending < 0.0001;
     }, 1000);
 
-    // Синхронизация с сервером каждые 12 сек
     setInterval(() => { loadUser(); }, 20000);
 
     async function claimRewards() {
@@ -847,7 +943,6 @@
         return;
       }
       claiming = true;
-      // Оптимистичный UI — сразу показываем результат
       const claimedLocal = pending;
       appBalance += claimedLocal;
       pending = 0;
@@ -862,18 +957,41 @@
           body: JSON.stringify({ user_id: userId })
         });
         const data = await res.json();
-        if (data && data.newBalance != null) {
-          appBalance = Number(data.newBalance);
-        }
-        // тихий sync
+        if (data && data.newBalance != null) appBalance = Number(data.newBalance);
         loadUser();
       } catch (e) {
-        console.error(e);
-        showToast('Ошибка синхронизации, обновите позже');
         loadUser();
       }
       claiming = false;
       updateUI();
+    }
+
+    async function claimStreak() {
+      if (claimedToday) {
+        showToast('Уже получено сегодня');
+        return;
+      }
+      try {
+        const res = await fetch(API + '/api/streak/claim', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId })
+        });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.error || 'Ошибка');
+
+        appBalance = data.new_balance;
+        streakCount = data.new_streak;
+        claimedToday = true;
+        totalStreakClaimed += data.reward;
+        nextReward = STREAK_REWARDS[Math.min(streakCount, 29)] || 2000;
+
+        updateUI();
+        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        showToast('Получено +' + data.reward + ' BTX!', true);
+      } catch (e) {
+        showToast('Ошибка сети');
+      }
     }
 
     function go(page) {
@@ -883,6 +1001,7 @@
         n.classList.toggle('active', n.dataset.page === page);
       });
       if (page === 'withdraw') loadWithdrawals();
+      if (page === 'streak') updateStreakUI();
     }
 
     function openLevels() {
@@ -902,7 +1021,6 @@
     function closeLevels() {
       document.getElementById('levels-modal').classList.remove('show');
     }
-
     function openRules() {
       document.getElementById('rules-modal').classList.add('show');
     }
@@ -914,19 +1032,18 @@
       document.getElementById('tab-rules').style.display = name === 'rules' ? 'block' : 'none';
       document.getElementById('tab-about').style.display = name === 'about' ? 'block' : 'none';
     }
-
     function setWithdraw(v) {
       document.getElementById('withdraw-amount').value = v;
       updateUI();
     }
-    document.getElementById('withdraw-amount').addEventListener('input', updateUI);
+    document.getElementById('withdraw-amount')?.addEventListener('input', updateUI);
 
     async function requestWithdraw() {
       const amt = Number(document.getElementById('withdraw-amount').value) || 0;
       if (amt < 10000) return showToast('Минимум 10 000 BTX');
       if (appBalance < amt) return showToast('Недостаточно баланса');
-      if (walletHold < amt * 0.25) return showToast('Недостаточно холда на кошельке (нужно 25%)');
-      if (!walletAddress) return showToast('Сначала подключите TON-кошелёк');
+      if (walletHold < amt * 0.25) return showToast('Недостаточно холда (нужно 25%)');
+      if (!walletAddress) return showToast('Сначала подключите кошелёк');
 
       try {
         const res = await fetch(API + '/api/withdraw', {
@@ -935,14 +1052,12 @@
           body: JSON.stringify({ user_id: userId, amount: amt })
         });
         const data = await res.json();
-        if (!res.ok) return showToast(data.error || 'Ошибка заявки');
+        if (!res.ok) return showToast(data.error || 'Ошибка');
         appBalance -= amt;
         updateUI();
-        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        showToast('Заявка на вывод создана', true);
+        showToast('Заявка создана', true);
         loadWithdrawals();
       } catch (e) {
-        console.error(e);
         showToast('Ошибка сети');
       }
     }
@@ -954,7 +1069,6 @@
         const data = await res.json();
         const list = data.withdrawals || [];
         const box = document.getElementById('withdraw-history');
-        if (!box) return;
         if (!list.length) {
           box.innerHTML = '<div class="muted">История выводов пуста</div>';
           return;
@@ -992,13 +1106,12 @@
       setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // Init — один запрос (register уже возвращает актуальные данные)
+    // Init
     if (user) {
       document.getElementById('ref-code').textContent = String(user.id).slice(-9);
     }
     registerUser();
 
-    // TonConnect
     try {
       if (window.TON_CONNECT_UI) {
         tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
@@ -1007,20 +1120,15 @@
         });
         tonConnectUI.onStatusChange(async (wallet) => {
           if (wallet && wallet.account && wallet.account.address) {
-            // raw address -> friendly not always available; store as-is
-            const raw = wallet.account.address;
-            await saveWallet(raw);
+            await saveWallet(wallet.account.address);
           } else if (!wallet) {
             walletAddress = null;
             updateWalletUI();
           }
         });
       }
-    } catch (e) {
-      console.warn('TonConnect init failed', e);
-    }
+    } catch (e) {}
 
-    // Keep-alive
     setInterval(() => {
       fetch(API + '/health').catch(() => {});
     }, 240000);
