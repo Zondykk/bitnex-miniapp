@@ -1,7 +1,7 @@
 {
-  "url": "https://bitnex-mining.vercel.app",
-  "name": "BitneX Mining",
-  "iconUrl": "https://bitnex-mining.vercel.app/icon.png",
-  "termsOfUseUrl": "https://bitnex-mining.vercel.app",
-  "privacyPolicyUrl": "https://bitnex-mining.vercel.app"
+  "url": "https://bitnex-miniapp-zond.vercel.app",
+  "name": "BitneX",
+  "iconUrl": "https://bitnex-miniapp-zond.vercel.app/logo.png",
+  "termsOfUseUrl": "https://bitnex-miniapp-zond.vercel.app",
+  "privacyPolicyUrl": "https://bitnex-miniapp-zond.vercel.app"
 }
