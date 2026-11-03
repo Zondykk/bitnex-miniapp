@@ -891,18 +891,16 @@
     }
     registerUser().then(() => loadUser());
 
-    // Local pending mining (позже перенесём на бэкенд)
-    setInterval(() => {
-      const add = (hourlyRate / 3600) * 3 * boost;
-      pending += add;
+    // Майнинг считается на сервере. Периодически подтягиваем актуальный pending.
+    setInterval(async () => {
+      await loadUser();
       const el = document.getElementById('pending-earn');
       if (el) {
-        el.textContent = '+' + pending.toFixed(4) + ' BTX';
         el.classList.remove('bump');
         void el.offsetWidth;
         el.classList.add('bump');
       }
-    }, 3000);
+    }, 15000); // каждые 15 сек обновляем с сервера
 
     const withdrawInput = document.getElementById('withdraw-amount');
     if (withdrawInput) withdrawInput.addEventListener('input', updateUI);
@@ -928,8 +926,6 @@
       // Сначала синхронизируем pending на сервер через claim
       // (пока pending считается локально — в будущем будет на бэке)
       try {
-        // Временно просто обновляем локальный баланс + вызываем API
-        const claimed = pending;
         const res = await fetch(API + '/api/claim', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -937,15 +933,14 @@
         });
         const data = await res.json();
 
-        // Так как pending пока локальный, добавляем его вручную после claim
-        appBalance = (Number(data.newBalance) || appBalance) + claimed;
+        const claimed = Number(data.claimed) || 0;
+        appBalance = Number(data.newBalance) || appBalance;
         pending = 0;
 
-        // Перезагружаем актуальные данные
         await loadUser();
 
         if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        showToast('Собрано ' + claimed.toFixed(4) + ' BTX', true);
+        showToast(claimed > 0 ? ('Собрано ' + claimed.toFixed(4) + ' BTX') : 'Пока нечего собирать', claimed > 0);
       } catch (e) {
         console.error(e);
         showToast('Ошибка при сборе');
