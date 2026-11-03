@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BitneX Mining</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #07070f;
+      --bg-card: #0f111a;
+      --bg-card-2: #12151f;
+      --bg-elevated: #161a26;
+      --border: rgba(0, 140, 255, 0.18);
+      --border-strong: rgba(0, 160, 255, 0.38);
+      --accent: #00a8ff;
+      --accent-2: #0077ff;
+      --accent-glow: rgba(0, 168, 255, 0.4);
+      --text: #f0f4ff;
+      --text-secondary: #8b9bb8;
+      --text-muted: #5a6a85;
+      --success: #00e676;
+      --success-glow: rgba(0, 230, 118, 0.35);
+      --warning: #ffb300;
+      --danger: #ff5252;
+      --radius: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 92px;
+    }
+
+    .app-header {
+      padding: 14px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(0, 40, 90, 0.45) 0%, transparent 100%);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .brand-logo {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #00a8ff, #0055ff);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 20px; color: white;
+      box-shadow: 0 0 20px var(--accent-glow);
+      position: relative; overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      animation: shine 4s infinite;
+    }
+
+    @keyframes shine {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-name { font-weight: 700; font-size: 16px; line-height: 1.2; }
+    .brand-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.6px; text-transform: uppercase; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .header-btn {
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); width: 36px; height: 36px;
+      border-radius: 11px; font-size: 16px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+
+    .level-badge {
+      background: linear-gradient(135deg, rgba(0,168,255,0.22), rgba(0,100,255,0.15));
+      border: 1px solid var(--border-strong);
+      color: var(--accent); padding: 6px 12px; border-radius: 11px;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; gap: 5px; cursor: pointer;
+    }
+
+    .balance-section { padding: 6px 16px 0; }
+
+    .balance-card {
+      background: linear-gradient(145deg, #0c1424 0%, #0a0e18 100%);
+      border: 1px solid var(--border); border-radius: 22px;
+      padding: 18px; position: relative; overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute; top: -50%; right: -25%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(0,168,255,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .balance-top {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+    }
+
+    .balance-label {
+      font-size: 12px; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .balance-hint {
+      font-size: 10px; color: var(--text-muted);
+      background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 6px;
+    }
+
+    .balance-value-row { display: flex; align-items: baseline; gap: 6px; }
+
+    .balance-value {
+      font-size: 34px; font-weight: 700; letter-spacing: -0.8px;
+      background: linear-gradient(90deg, #6dd5ff, #00a8ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1;
+    }
+
+    .balance-token { font-size: 16px; font-weight: 600; color: var(--accent); }
+
+    .mining-card {
+      margin: 14px 16px 0; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 20px; padding: 16px;
+    }
+
+    .mining-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+    }
+
+    .mining-title {
+      display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600;
+    }
+
+    .status-dot {
+      width: 9px; height: 9px; background: var(--success); border-radius: 50%;
+      box-shadow: 0 0 10px var(--success); animation: pulse-dot 1.8s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.75; }
+    }
+
+    .mining-status { font-size: 12px; color: var(--success); font-weight: 500; }
+
+    .leagues-btn {
+      background: rgba(0,168,255,0.12); border: 1px solid var(--border);
+      color: var(--accent); padding: 6px 12px; border-radius: 9px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+
+    .earned-now {
+      font-size: 30px; font-weight: 700; color: var(--success);
+      margin-bottom: 12px; letter-spacing: -0.6px;
+      text-shadow: 0 0 24px var(--success-glow);
+    }
+
+    .earned-now.bump { animation: bump 0.35s ease; }
+
+    @keyframes bump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    .progress-bar {
+      height: 7px; background: rgba(255,255,255,0.06);
+      border-radius: 10px; overflow: hidden; position: relative;
+    }
+
+    .progress-fill {
+      height: 100%; width: 8%;
+      background: linear-gradient(90deg, #00a8ff, #00e5ff);
+      border-radius: 10px;
+      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      animation: progress-shine 2.2s infinite;
+    }
+
+    @keyframes progress-shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-text {
+      font-size: 11px; color: var(--text-muted); margin-top: 7px;
+      display: flex; justify-content: space-between;
+    }
+
+    .stats-row {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px; margin: 14px 16px 0;
+    }
+
+    .stat-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 13px 8px; text-align: center;
+    }
+
+    .stat-icon { font-size: 17px; margin-bottom: 5px; }
+    .stat-value { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
+    .stat-label { font-size: 11px; color: var(--text-muted); }
+    .stat-value.blue { color: var(--accent); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.orange { color: #ffb74d; }
+
+    .hold-info {
+      margin: 14px 16px 0;
+      background: linear-gradient(90deg, rgba(0,168,255,0.09), rgba(0,100,255,0.05));
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 13px 15px;
+      display: flex; align-items: center; justify-content: space-between; font-size: 13px;
+    }
+
+    .hold-left { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); }
+    .hold-value { font-weight: 700; color: var(--accent); }
+
+    .claim-wrap { padding: 18px 16px 0; }
+
+    .btn-primary {
+      width: 100%; height: 52px; border: none; border-radius: 15px;
+      background: linear-gradient(135deg, #00a8ff, #0066ff); color: white;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 100, 255, 0.38);
+    }
+
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      width: 100%; height: 46px; border: 1px solid var(--border-strong);
+      border-radius: 13px; background: transparent; color: var(--accent);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+
+    .btn-demo {
+      background: rgba(255,179,0,0.12); border: 1px solid rgba(255,179,0,0.35);
+      color: var(--warning); padding: 8px 12px; border-radius: 10px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 76px;
+      background: rgba(8, 10, 18, 0.96);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; justify-content: space-around; align-items: center;
+      padding-bottom: env(safe-area-inset-bottom); z-index: 100;
+    }
+
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text-muted); font-size: 10px; font-weight: 500;
+      cursor: pointer; padding: 6px 8px; min-width: 58px;
+    }
+
+    .nav-item.active { color: var(--accent); }
+    .nav-icon { font-size: 22px; line-height: 1; }
+
+    .nav-item.center { position: relative; top: -14px; }
+
+    .nav-item.center .nav-icon-wrap {
+      width: 54px; height: 54px;
+      background: linear-gradient(135deg, #00a8ff, #0066ff);
+      border-radius: 17px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 22px rgba(0, 120, 255, 0.45);
+      font-size: 24px; color: white;
+    }
+
+    .page { display: none; animation: fadeIn 0.28s ease; }
+    .page.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title { font-size: 19px; font-weight: 700; padding: 16px 16px 12px; }
+
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; margin: 0 16px 12px;
+    }
+
+    .ref-code-box {
+      background: rgba(0,168,255,0.08); border: 1px dashed var(--border-strong);
+      border-radius: 14px; padding: 16px; text-align: center; margin-bottom: 14px;
+    }
+
+    .ref-code {
+      font-size: 24px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--accent); margin: 8px 0;
+    }
+
+    .ref-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;
+    }
+
+    .ref-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;
+    }
+
+    .ref-stat {
+      background: var(--bg-card-2); border-radius: 14px; padding: 14px; text-align: center;
+    }
+
+    .ref-stat-value { font-size: 22px; font-weight: 700; color: var(--accent); }
+    .ref-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+    .ref-from {
+      font-size: 12px; color: var(--text-muted); margin-top: 10px;
+      padding: 8px; background: rgba(255,255,255,0.03); border-radius: 8px;
+    }
+
+    .info-block {
+      background: rgba(0,168,255,0.07); border-left: 3px solid var(--accent);
+      border-radius: 0 12px 12px 0; padding: 13px 15px; margin-bottom: 16px;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+    }
+
+    .withdraw-input {
+      width: 100%; background: var(--bg-card-2); border: 1px solid var(--border);
+      border-radius: 13px; padding: 15px; color: var(--text);
+      font-size: 19px; font-weight: 600; outline: none;
+    }
+
+    .withdraw-input:focus { border-color: var(--accent); }
+
+    .quick-amounts {
+      display: flex; gap: 8px; margin-top: 11px; flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      background: var(--bg-card-2); border: 1px solid var(--border);
+      color: var(--text-secondary); padding: 8px 14px; border-radius: 9px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+
+    .menu-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px 16px;
+    }
+
+    .menu-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 20px 14px; text-align: center; cursor: pointer;
+    }
+
+    .menu-item-icon { font-size: 30px; margin-bottom: 10px; }
+    .menu-item-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .menu-item-desc { font-size: 11px; color: var(--text-muted); }
+
+    .menu-tag {
+      display: inline-block; margin-top: 10px; font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(0,168,255,0.16); color: var(--accent);
+    }
+
+    .menu-tag.hot { background: rgba(255,100,50,0.18); color: #ff8a50; }
+    .menu-tag.new { background: rgba(0,230,118,0.15); color: var(--success); }
+
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 200;
+      display: none; align-items: flex-end; justify-content: center;
+      opacity: 0; transition: opacity 0.25s;
+    }
+
+    .modal-overlay.show { display: flex; opacity: 1; }
+
+    .modal {
+      background: var(--bg-card); border-radius: 22px 22px 0 0;
+      width: 100%; max-width: 480px; padding: 22px 18px 32px;
+      max-height: 82vh; overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .modal-overlay.show .modal { transform: translateY(0); }
+
+    .modal-title {
+      font-size: 18px; font-weight: 700; margin-bottom: 14px; text-align: center;
+    }
+
+    .modal-close {
+      width: 100%; margin-top: 18px; height: 48px; border: none; border-radius: 13px;
+      background: rgba(255,255,255,0.08); color: var(--text);
+      font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+
+    .level-table {
+      width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px;
+    }
+
+    .level-table th {
+      text-align: left; color: var(--text-muted); font-weight: 500;
+      padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .level-table td {
+      padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .level-table tr.current { background: rgba(0,168,255,0.1); }
+    .level-table tr.current td { color: var(--accent); font-weight: 600; }
+
+    .toast {
+      position: fixed; top: 70px; left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--bg-elevated); border: 1px solid var(--border-strong);
+      color: var(--text); padding: 12px 20px; border-radius: 14px;
+      font-size: 14px; font-weight: 600; z-index: 300;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success {
+      border-color: rgba(0,230,118,0.4);
+      box-shadow: 0 10px 30px rgba(0,230,118,0.15);
+    }
+
+    .demo-panel {
+      margin: 14px 16px 0;
+      background: rgba(255,179,0,0.06);
+      border: 1px dashed rgba(255,179,0,0.3);
+      border-radius: 14px; padding: 12px;
+    }
+
+    .demo-title {
+      font-size: 11px; color: var(--warning); font-weight: 700;
+      margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .demo-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <div class="brand">
+      <div class="brand-logo">B</div>
+      <div class="brand-text">
+        <div class="brand-name">BitneX Mining</div>
+        <div class="brand-sub">Official Web3 App</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="header-btn" onclick="showInfo()">📘</div>
+      <div class="level-badge" id="level-badge" onclick="showLevels()">
+        <span>⚡</span>
+        <span id="level-text">Ур. 1</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-mining" class="page active">
+    <div class="balance-section">
+      <div class="balance-card">
+        <div class="balance-top">
+          <div class="balance-label"><span>◈</span> Баланс в приложении</div>
+          <div class="balance-hint">Не влияет на уровень</div>
+        </div>
+        <div class="balance-value-row">
+          <span class="balance-value" id="app-balance">0.0000</span>
+          <span class="balance-token">BTX</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mining-card">
+      <div class="mining-header">
+        <div class="mining-title">
+          <span class="status-dot"></span>
+          <span>Активный майнинг</span>
+          <span class="mining-status">• Работает</span>
+        </div>
+        <button class="leagues-btn" onclick="showLevels()">Лиги</button>
+      </div>
+
+      <div class="earned-now" id="pending-earn">+0.0000 BTX</div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="level-progress"></div>
+        </div>
+        <div class="progress-text">
+          <span id="progress-label">До следующего уровня</span>
+          <span id="progress-percent">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value blue" id="rate-hour">20.0</div>
+        <div class="stat-label">В час</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value green" id="rate-day">~480</div>
+        <div class="stat-label">В сутки</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-value orange" id="boost-mult">×1.00</div>
+        <div class="stat-label">Буст</div>
+      </div>
+    </div>
+
+    <div class="hold-info">
+      <div class="hold-left">
+        <span>💼</span>
+        <span>Холд на кошельке:</span>
+      </div>
+      <div class="hold-value" id="wallet-hold">0 BTX</div>
+    </div>
+
+    <div class="demo-panel">
+      <div class="demo-title">🧪 Демо (только для теста)</div>
+      <div class="demo-btns">
+        <button class="btn-demo" onclick="demoSetHold(0)">Холд 0</button>
+        <button class="btn-demo" onclick="demoSetHold(150)">Холд 150</button>
+        <button class="btn-demo" onclick="demoSetHold(2500)">Холд 2500</button>
+        <button class="btn-demo" onclick="demoSetHold(10000)">Холд 10k</button>
+        <button class="btn-demo" onclick="demoAddRef()">+1 реферал</button>
+      </div>
+    </div>
+
+    <div class="claim-wrap">
+      <button class="btn-primary" id="claim-btn" onclick="claimRewards()">
+        Собрать награды
+      </button>
+    </div>
+  </div>
+
+  <div id="page-shop" class="page">
+    <div class="page-title">Магазин</div>
+    <div class="card">
+      <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 6px;">Покупка BTX за TON</div>
+      <div style="text-align: center; padding: 14px 0 18px;">
+        <div style="font-size: 26px; font-weight: 700; color: var(--accent);">1 BTX ≈ — TON</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Источник: STON.fi</div>
+      </div>
+      <button class="btn-primary" onclick="showToast('Интеграция со STON.fi будет подключена')">
+        Купить BTX
+      </button>
+      <div style="margin-top: 12px;">
+        <button class="btn-secondary" onclick="showToast('История пока пуста')">История пополнений</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-menu" class="page">
+    <div class="page-title">Меню</div>
+    <div class="menu-grid">
+      <div class="menu-item" onclick="showToast('Стейкинг скоро')">
+        <div class="menu-item-icon">💎</div>
+        <div class="menu-item-title">Стейкинг</div>
+        <div class="menu-item-desc">Доход до +35% APY</div>
+        <div class="menu-tag">+35%</div>
+      </div>
+      <div class="menu-item" onclick="showToast('Задания скоро')">
+        <div class="menu-item-icon">📋</div>
+        <div class="menu-item-title">Задания</div>
+        <div class="menu-item-desc">Стрик и награды</div>
+        <div class="menu-tag new">NEW</div>
+      </div>
+      <div class="menu-item" onclick="showToast('Амбассадор скоро')">
+        <div class="menu-item-icon">👑</div>
+        <div class="menu-item-title">Амбассадор</div>
+        <div class="menu-item-desc">Партнёрка до 25%</div>
+      </div>
+      <div class="menu-item" onclick="showToast('Башня скоро')">
+        <div class="menu-item-icon">🏗️</div>
+        <div class="menu-item-title">Башня</div>
+        <div class="menu-item-desc">Крипто-башня</div>
+        <div class="menu-tag hot">HOT</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-friends" class="page">
+    <div class="page-title">Друзья</div>
+    <div class="card">
+      <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.45;">
+        Приглашай друзей и получай <b style="color: var(--accent);">5%</b> от их сборов навсегда
+      </div>
+
+      <div class="ref-code-box">
+        <div style="font-size: 12px; color: var(--text-muted);">Ваша реферальная ссылка</div>
+        <div class="ref-code" id="ref-code">—</div>
+        <div class="ref-actions">
+          <button class="btn-secondary" style="height: 44px;" onclick="copyRef()">Копировать</button>
+          <button class="btn-primary" style="height: 44px;" onclick="shareRef()">Поделиться</button>
+        </div>
+        <div class="ref-from" id="ref-from" style="display:none;"></div>
+      </div>
+
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <div class="ref-stat-value" id="ref-count">0</div>
+          <div class="ref-stat-label">Приглашено</div>
+        </div>
+        <div class="ref-stat">
+          <div class="ref-stat-value" id="ref-earned">0.00</div>
+          <div class="ref-stat-label">Заработано BTX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-withdraw" class="page">
+    <div class="page-title">Вывод</div>
+    <div class="card">
+      <div class="info-block">
+        Минимальная сумма: <b>10 000 BTX</b><br>
+        Комиссия сервиса: <b>5%</b><br>
+        Для вывода нужно держать на кошельке минимум <b>25%</b> от суммы вывода<br>
+        Интервал между заявками: 24 часа
+      </div>
+
+      <div style="margin: 16px 0;">
+        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 7px;">Сумма для вывода</div>
+        <input class="withdraw-input" type="number" id="withdraw-amount" value="10000" />
+        <div class="quick-amounts">
+          <button class="quick-btn" onclick="setAmount(10000)">10k</button>
+          <button class="quick-btn" onclick="setAmount(25000)">25k</button>
+          <button class="quick-btn" onclick="setAmount(50000)">50k</button>
+          <button class="quick-btn" onclick="setAmount(100000)">100k</button>
+        </div>
+      </div>
+
+      <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;" id="withdraw-req">
+        Нужно холда: <b id="needed-hold">2 500</b> BTX
+      </div>
+
+      <button class="btn-primary" onclick="requestWithdraw()">
+        Вывести на кошелёк
+      </button>
+
+      <div style="margin-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.4;">
+        Для реального вывода необходимо подключить TON-кошелёк
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showPage('mining', this)">
+      <div class="nav-icon">⛏️</div>
+      <div>Майнинг</div>
+    </div>
+    <div class="nav-item" onclick="showPage('shop', this)">
+      <div class="nav-icon">🛒</div>
+      <div>Магазин</div>
+    </div>
+    <div class="nav-item center" onclick="showPage('menu', this)">
+      <div class="nav-icon-wrap">▦</div>
+    </div>
+    <div class="nav-item" onclick="showPage('friends', this)">
+      <div class="nav-icon">👥</div>
+      <div>Друзья</div>
+    </div>
+    <div class="nav-item" onclick="showPage('withdraw', this)">
+      <div class="nav-icon">💼</div>
+      <div>Вывод</div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="levels-modal">
+    <div class="modal">
+      <div class="modal-title">Система уровней</div>
+      <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 14px;">
+        Уровень и буст зависят <b>только</b> от количества BTX на подключённом TON-кошельке.
+        Баланс внутри приложения на уровень не влияет.
+      </div>
+
+      <div style="background: var(--bg-card-2); border-radius: 14px; padding: 14px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span>Текущий уровень</span>
+          <span style="color: var(--accent); font-weight: 700;" id="modal-level">1</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 8px;">
+          <span>Холд на кошельке</span>
+          <span style="color: var(--accent); font-weight: 700;" id="modal-hold">0 BTX</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 8px;">
+          <span>Множитель</span>
+          <span style="color: var(--success); font-weight: 700;" id="modal-boost">×1.00</span>
+        </div>
+      </div>
+
+      <table class="level-table">
+        <thead>
+          <tr>
+            <th>Ур.</th>
+            <th>Холд BTX</th>
+            <th>Скорость</th>
+            <th>Буст</th>
+          </tr>
+        </thead>
+        <tbody id="levels-body"></tbody>
+      </table>
+
+      <button class="modal-close" onclick="closeLevels()">Понятно</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#07070f');
+    tg.setBackgroundColor('#07070f');
+    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+
+    const API = 'https://bitnex-backend-production.up.railway.app';
+
+    // ===== LEVELS =====
+    const LEVELS = [
+      { level: 1, hold: 0,     rate: 20,  boost: 1.00 },
+      { level: 2, hold: 150,   rate: 24,  boost: 1.20 },
+      { level: 3, hold: 500,   rate: 30,  boost: 1.50 },
+      { level: 4, hold: 1200,  rate: 40,  boost: 2.00 },
+      { level: 5, hold: 2500,  rate: 55,  boost: 2.75 },
+      { level: 6, hold: 6000,  rate: 80,  boost: 4.00 },
+      { level: 7, hold: 15000, rate: 120, boost: 6.00 },
+      { level: 8, hold: 40000, rate: 200, boost: 10.0 },
+    ];
+
+    const user = tg.initDataUnsafe?.user;
+    const startParam = tg.initDataUnsafe?.start_param || null;
+
+    let appBalance = 0;
+    let pending = 0;
+    let walletHold = 0;
+    let refCount = 0;
+    let refEarned = 0;
+    let myReferrer = null;
+    let currentLevel = 1;
+    let boost = 1.0;
+    let hourlyRate = 20;
+    let userId = user?.id || null;
+
+    function calcLevel() {
+      let lvl = LEVELS[0];
+      for (const l of LEVELS) {
+        if (walletHold >= l.hold) lvl = l;
+      }
+      currentLevel = lvl.level;
+      boost = lvl.boost;
+      hourlyRate = lvl.rate;
+      return lvl;
+    }
+
+    function getNextLevel() {
+      return LEVELS.find(l => l.level === currentLevel + 1) || null;
+    }
+
+    function updateUI() {
+      calcLevel();
+
+      document.getElementById('app-balance').textContent = appBalance.toFixed(4);
+      document.getElementById('pending-earn').textContent = '+' + pending.toFixed(4) + ' BTX';
+      document.getElementById('rate-hour').textContent = hourlyRate.toFixed(1);
+      document.getElementById('rate-day').textContent = '~' + Math.round(hourlyRate * 24);
+      document.getElementById('boost-mult').textContent = '×' + boost.toFixed(2);
+      document.getElementById('wallet-hold').textContent = walletHold.toLocaleString() + ' BTX';
+      document.getElementById('level-text').textContent = 'Ур. ' + currentLevel;
+      document.getElementById('modal-level').textContent = currentLevel;
+      document.getElementById('modal-hold').textContent = walletHold.toLocaleString() + ' BTX';
+      document.getElementById('modal-boost').textContent = '×' + boost.toFixed(2);
+      document.getElementById('ref-count').textContent = refCount;
+      document.getElementById('ref-earned').textContent = refEarned.toFixed(2);
+
+      const next = getNextLevel();
+      let progress = 100;
+      if (next) {
+        const prevHold = LEVELS.find(l => l.level === currentLevel)?.hold || 0;
+        const range = next.hold - prevHold;
+        const done = walletHold - prevHold;
+        progress = Math.min(99, Math.max(0, (done / range) * 100));
+        document.getElementById('progress-label').textContent = 'До Ур. ' + next.level + ' (' + next.hold.toLocaleString() + ' BTX)';
+      } else {
+        document.getElementById('progress-label').textContent = 'Максимальный уровень';
+      }
+      document.getElementById('level-progress').style.width = progress + '%';
+      document.getElementById('progress-percent').textContent = Math.round(progress) + '%';
+
+      document.getElementById('levels-body').innerHTML = LEVELS.map(l =>
+        '<tr class="' + (l.level === currentLevel ? 'current' : '') + '">' +
+        '<td>' + l.level + '</td>' +
+        '<td>' + l.hold.toLocaleString() + '</td>' +
+        '<td>' + l.rate + '/ч</td>' +
+        '<td>×' + l.boost.toFixed(2) + '</td></tr>'
+      ).join('');
+
+      const amount = parseFloat(document.getElementById('withdraw-amount')?.value) || 10000;
+      const needed = Math.ceil(amount * 0.25);
+      const neededEl = document.getElementById('needed-hold');
+      if (neededEl) neededEl.textContent = needed.toLocaleString();
+
+      const refFromEl = document.getElementById('ref-from');
+      if (refFromEl && myReferrer) {
+        refFromEl.style.display = 'block';
+        refFromEl.innerHTML = 'Вы пришли по рефке: <b style="color:var(--accent)">' + myReferrer + '</b>';
+      }
+    }
+
+    // ===== API =====
+    async function registerUser() {
+      if (!userId) return;
+      try {
+        const res = await fetch(API + '/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: userId,
+            username: user?.username || null,
+            first_name: user?.first_name || null,
+            last_name: user?.last_name || null,
+            start_param: startParam
+          })
+        });
+        const data = await res.json();
+        if (data.id) {
+          appBalance = Number(data.app_balance) || 0;
+          pending = Number(data.pending) || 0;
+          walletHold = Number(data.wallet_hold) || 0;
+          refCount = data.referrals?.count || 0;
+          refEarned = data.referrals?.earned || 0;
+          if (user) {
+            document.getElementById('ref-code').textContent = data.ref_code || user.id.toString().slice(-9);
+          }
+          updateUI();
+        }
+      } catch (e) {
+        console.error('register error', e);
+        showToast('Ошибка подключения к серверу');
+      }
+    }
+
+    async function loadUser() {
+      if (!userId) return;
+      try {
+        const res = await fetch(API + '/api/user/' + userId);
+        if (!res.ok) return;
+        const data = await res.json();
+        appBalance = Number(data.app_balance) || 0;
+        pending = Number(data.pending) || 0;
+        walletHold = Number(data.wallet_hold) || 0;
+        refCount = data.referrals?.count || 0;
+        refEarned = data.referrals?.earned || 0;
+        if (data.ref_code) {
+          document.getElementById('ref-code').textContent = data.ref_code;
+        }
+        updateUI();
+      } catch (e) {
+        console.error('load error', e);
+      }
+    }
+
+    // Init
+    if (user) {
+      document.getElementById('ref-code').textContent = user.id.toString().slice(-9);
+    }
+    registerUser().then(() => loadUser());
+
+    // Local pending mining (позже перенесём на бэкенд)
+    setInterval(() => {
+      const add = (hourlyRate / 3600) * 3 * boost;
+      pending += add;
+      const el = document.getElementById('pending-earn');
+      if (el) {
+        el.textContent = '+' + pending.toFixed(4) + ' BTX';
+        el.classList.remove('bump');
+        void el.offsetWidth;
+        el.classList.add('bump');
+      }
+    }, 3000);
+
+    const withdrawInput = document.getElementById('withdraw-amount');
+    if (withdrawInput) withdrawInput.addEventListener('input', updateUI);
+
+    function showPage(page, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      if (el) el.classList.add('active');
+      if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
+    async function claimRewards() {
+      if (pending < 0.0001) {
+        showToast('Пока нечего собирать');
+        return;
+      }
+      if (!userId) {
+        showToast('Пользователь не определён');
+        return;
+      }
+
+      // Сначала синхронизируем pending на сервер через claim
+      // (пока pending считается локально — в будущем будет на бэке)
+      try {
+        // Временно просто обновляем локальный баланс + вызываем API
+        const claimed = pending;
+        const res = await fetch(API + '/api/claim', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId })
+        });
+        const data = await res.json();
+
+        // Так как pending пока локальный, добавляем его вручную после claim
+        appBalance = (Number(data.newBalance) || appBalance) + claimed;
+        pending = 0;
+
+        // Перезагружаем актуальные данные
+        await loadUser();
+
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        showToast('Собрано ' + claimed.toFixed(4) + ' BTX', true);
+      } catch (e) {
+        console.error(e);
+        showToast('Ошибка при сборе');
+      }
+    }
+
+    function showLevels() {
+      document.getElementById('levels-modal').classList.add('show');
+      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+    }
+
+    function closeLevels() {
+      document.getElementById('levels-modal').classList.remove('show');
+    }
+
+    function showInfo() {
+      showToast('Правила: холд 25% от суммы вывода, комиссия 5%');
+    }
+
+    function copyRef() {
+      const code = document.getElementById('ref-code').textContent;
+      const link = 'https://t.me/BitneXMining_bot?start=' + code;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('Ссылка скопирована!', true);
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      }).catch(() => showToast('Не удалось скопировать'));
+    }
+
+    function shareRef() {
+      const code = document.getElementById('ref-code').textContent;
+      const link = 'https://t.me/BitneXMining_bot?start=' + code;
+      if (tg.openTelegramLink) {
+        tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Присоединяйся к BitneX Mining!'));
+      } else {
+        copyRef();
+      }
+    }
+
+    function setAmount(val) {
+      document.getElementById('withdraw-amount').value = val;
+      updateUI();
+      if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
+    function requestWithdraw() {
+      const amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
+      const neededHold = Math.ceil(amount * 0.25);
+
+      if (amount < 10000) {
+        showToast('Минимум 10 000 BTX');
+        return;
+      }
+      if (amount > appBalance) {
+        showToast('Недостаточно средств на балансе');
+        return;
+      }
+      if (walletHold < neededHold) {
+        showToast('Нужно холда минимум ' + neededHold.toLocaleString() + ' BTX');
+        return;
+      }
+      showToast('Заявка принята. Вывод будет доступен после подключения кошелька', true);
+    }
+
+    function demoSetHold(val) {
+      walletHold = val;
+      updateUI();
+      showToast('Холд (демо): ' + val.toLocaleString() + ' BTX', true);
+    }
+
+    function demoAddRef() {
+      refCount += 1;
+      refEarned += 12.5;
+      updateUI();
+      showToast('+1 реферал (демо)', true);
+    }
+
+    function showToast(msg, success) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (success ? ' success' : '');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    document.getElementById('levels-modal').addEventListener('click', function(e) {
+      if (e.target.id === 'levels-modal') closeLevels();
+    });
+  </script>
+</body></html>
