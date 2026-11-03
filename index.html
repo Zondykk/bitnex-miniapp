@@ -759,7 +759,7 @@
     }, 1000);
 
     // Синхронизация с сервером каждые 12 сек
-    setInterval(() => { loadUser(); }, 12000);
+    setInterval(() => { loadUser(); }, 20000);
 
     async function claimRewards() {
       if (pending < 0.0001 || claiming) {
@@ -767,7 +767,14 @@
         return;
       }
       claiming = true;
+      // Оптимистичный UI — сразу показываем результат
+      const claimedLocal = pending;
+      appBalance += claimedLocal;
+      pending = 0;
       updateUI();
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      showToast('Собрано ' + claimedLocal.toFixed(4) + ' BTX', true);
+
       try {
         const res = await fetch(API + '/api/claim', {
           method: 'POST',
@@ -775,15 +782,15 @@
           body: JSON.stringify({ user_id: userId })
         });
         const data = await res.json();
-        const claimed = Number(data.claimed) || 0;
-        appBalance = Number(data.newBalance) || appBalance;
-        pending = 0;
-        await loadUser();
-        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        showToast(claimed > 0 ? ('Собрано ' + claimed.toFixed(4) + ' BTX') : 'Пока нечего собирать', claimed > 0);
+        if (data && data.newBalance != null) {
+          appBalance = Number(data.newBalance);
+        }
+        // тихий sync
+        loadUser();
       } catch (e) {
         console.error(e);
-        showToast('Ошибка при сборе');
+        showToast('Ошибка синхронизации, обновите позже');
+        loadUser();
       }
       claiming = false;
       updateUI();
@@ -863,14 +870,16 @@
       setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // Init
+    // Init — один запрос (register уже возвращает актуальные данные)
     if (user) {
       document.getElementById('ref-code').textContent = String(user.id).slice(-9);
     }
-    (async () => {
-      await registerUser();
-      await loadUser();
-    })();
+    registerUser();
+
+    // Keep-alive: не даём Railway уснуть (раз в 4 мин)
+    setInterval(() => {
+      fetch(API + '/health').catch(() => {});
+    }, 240000);
   </script>
 </body>
 </html>
