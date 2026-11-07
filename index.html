@@ -9,451 +9,910 @@
   <style>
     :root {
       --bg: #070b10;
-      --card: #0f141c;
-      --card2: #141b24;
-      --border: rgba(255,255,255,0.07);
-      --border-light: rgba(255,255,255,0.12);
-      --text: #f0f4f8;
-      --muted: #8b9bb0;
-      --blue: #2f9bff;
-      --blue-glow: rgba(47,155,255,0.35);
-      --blue2: #1a7ae0;
+      --bg2: #0c1219;
+      --card: #101820;
+      --card-hover: #131c26;
+      --border: rgba(255,255,255,0.055);
+      --border-light: rgba(255,255,255,0.08);
+      --text: #f1f5f9;
+      --muted: #7d8da1;
+      --blue: #3b9eff;
+      --blue-dark: #1a6fd0;
+      --blue-glow: rgba(59,158,255,0.25);
       --green: #22c55e;
-      --green-glow: rgba(34,197,94,0.3);
+      --green-glow: rgba(34,197,94,0.2);
       --gold: #f5c518;
-      --gold-glow: rgba(245,197,24,0.25);
       --danger: #ef4444;
+      --radius: 16px;
+      --radius-sm: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 90px;
+      padding-bottom: 92px;
+      line-height: 1.4;
     }
 
-    .app { max-width: 430px; margin: 0 auto; }
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+    }
 
     /* ===== HEADER ===== */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px 8px;
+      padding: 16px 16px 10px;
     }
-    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
     .logo {
-      width: 40px; height: 40px; border-radius: 12px;
-      background: linear-gradient(135deg, #2f9bff, #0057c8);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 17px; color: #fff;
-      box-shadow: 0 4px 16px var(--blue-glow);
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #3b9eff, #1565c0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(59,158,255,0.35);
     }
-    .brand-text .name { font-weight: 700; font-size: 15px; }
-    .brand-text .sub { font-size: 10px; color: var(--muted); letter-spacing: 0.4px; margin-top: 1px; }
-    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .brand-text .name {
+      font-weight: 700;
+      font-size: 15.5px;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-text .sub {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
     .icon-btn {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: var(--card); border: 1px solid var(--border);
-      color: var(--text); display: flex; align-items: center; justify-content: center;
-      font-size: 15px; cursor: pointer;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.15s;
     }
+
+    .icon-btn:active {
+      background: var(--card-hover);
+    }
+
     .lvl-badge {
-      display: flex; align-items: center; gap: 4px;
-      background: linear-gradient(135deg, #1a3a5c, #0d2138);
-      border: 1px solid rgba(47,155,255,0.35);
-      color: var(--blue); font-size: 12.5px; font-weight: 700;
-      padding: 0 11px; height: 36px; border-radius: 10px; cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, rgba(59,158,255,0.12), rgba(59,158,255,0.05));
+      border: 1px solid rgba(59,158,255,0.25);
+      color: var(--blue);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 0 12px;
+      height: 38px;
+      border-radius: 11px;
+      cursor: pointer;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 0 16px 12px;
     }
 
     /* ===== BALANCE ===== */
     .balance-card {
-      margin: 6px 16px 0;
-      padding: 16px 16px 14px;
-      background: var(--card);
+      margin: 6px 16px 12px;
+      padding: 18px 16px;
+      background: linear-gradient(165deg, #111a24 0%, #0d1520 100%);
       border: 1px solid var(--border);
       border-radius: 18px;
+      position: relative;
+      overflow: hidden;
     }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(59,158,255,0.12), transparent 70%);
+      pointer-events: none;
+    }
+
     .balance-top {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
+
     .balance-label {
-      font-size: 13px; color: var(--muted);
-      display: flex; align-items: center; gap: 6px;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 500;
     }
+
     .tag {
-      font-size: 10px; padding: 3px 8px; border-radius: 6px;
-      background: rgba(255,255,255,0.05); color: var(--muted);
-      border: 1px solid var(--border);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-weight: 500;
     }
+
     .balance-value {
-      font-size: 32px; font-weight: 800; letter-spacing: -0.6px;
-      color: #fff;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--blue);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
     }
+
     .balance-value span {
-      font-size: 15px; color: var(--muted); font-weight: 600; margin-left: 4px;
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 600;
     }
 
     /* ===== MINING CARD ===== */
     .mining-card {
-      margin: 12px 16px 0;
-      padding: 16px;
+      margin: 0 16px 12px;
+      padding: 18px 16px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
     }
+
     .mining-head {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
     }
+
     .mining-title {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 14px; font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
     }
-    .mining-icon {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: rgba(47,155,255,0.12);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-    }
+
     .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
       background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-      animation: pulse 2s infinite;
-      margin-right: 2px;
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 2.2s infinite;
     }
+
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
     }
-    .status-text { color: var(--green); font-size: 12.5px; font-weight: 500; }
+
+    .status-text {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
     .leagues-btn {
-      background: rgba(47,155,255,0.1);
-      border: 1px solid rgba(47,155,255,0.28);
-      color: var(--blue); font-size: 12.5px; font-weight: 600;
-      padding: 6px 11px; border-radius: 8px; cursor: pointer;
-      display: flex; align-items: center; gap: 4px;
+      background: rgba(59,158,255,0.1);
+      border: 1px solid rgba(59,158,255,0.22);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
     }
+
     .pending {
-      font-size: 30px; font-weight: 800; color: var(--green);
-      letter-spacing: -0.5px; margin: 2px 0 12px;
-      transition: transform 0.15s ease;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.8px;
+      margin: 2px 0 14px;
+      text-shadow: 0 0 24px rgba(34,197,94,0.25);
     }
-    .pending.bump { transform: scale(1.03); }
-    .progress-wrap { margin-top: 2px; }
+
+    .progress-wrap {
+      margin-top: 2px;
+    }
+
     .progress-bar {
-      height: 5px; background: rgba(255,255,255,0.06);
-      border-radius: 4px; overflow: hidden;
+      height: 6px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      overflow: hidden;
     }
+
     .progress-fill {
-      height: 100%; background: linear-gradient(90deg, #1a7ae0, #2f9bff);
-      border-radius: 4px; transition: width 0.6s ease;
-      box-shadow: 0 0 10px rgba(47,155,255,0.4);
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), #60a5fa);
+      border-radius: 6px;
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 12px rgba(59,158,255,0.4);
     }
+
     .progress-meta {
-      display: flex; justify-content: space-between;
-      font-size: 11.5px; color: var(--muted); margin-top: 7px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 7px;
     }
 
     /* ===== STATS ===== */
     .stats {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px; margin: 12px 16px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 0 16px 12px;
     }
+
     .stat {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 6px; text-align: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 8px;
+      text-align: center;
     }
-    .stat-icon { font-size: 14px; margin-bottom: 4px; opacity: 0.9; }
-    .stat-val { font-size: 17px; font-weight: 700; }
+
+    .stat-val {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
     .stat-val.blue { color: var(--blue); }
     .stat-val.green { color: var(--green); }
     .stat-val.gold { color: var(--gold); }
-    .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    /* ===== LEAGUE CARD ===== */
-    .league-card {
-      margin: 12px 16px 0;
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ===== HOLD + WALLET ===== */
+    .hold-bar {
+      margin: 0 16px 10px;
+      padding: 13px 15px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hold-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hold-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .wallet-card {
+      margin: 0 16px 14px;
       padding: 14px 15px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      display: flex; align-items: center; gap: 12px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .wallet-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .wallet-title {
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .wallet-addr {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #3b9eff, #1a6fd0);
+      color: #fff;
+      font-size: 15.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(59,158,255,0.28);
+      transition: transform 0.12s, opacity 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.985);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .btn-main {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #3b9eff, #1a6fd0);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-sec {
+      flex: 1;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
     }
-    .league-lvl {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(47,155,255,0.2), rgba(26,122,224,0.15));
-      border: 1px solid rgba(47,155,255,0.3);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      font-weight: 800; color: var(--blue);
-    }
-    .league-lvl span { font-size: 9px; font-weight: 600; opacity: 0.8; }
-    .league-info { flex: 1; min-width: 0; }
-    .league-name { font-size: 14.5px; font-weight: 700; }
-    .league-hold { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-    .league-note { font-size: 11.5px; color: var(--green); margin-top: 3px; }
-    .league-arrow { color: var(--muted); font-size: 18px; }
 
-    /* ===== RULES CARD ===== */
-    .rules-card {
-      margin: 12px 16px 0;
-      padding: 14px 15px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+    .claim-wrap {
+      padding: 4px 16px 0;
     }
-    .rules-title {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13.5px; font-weight: 700; margin-bottom: 10px;
-    }
-    .rules-badge {
-      font-size: 10px; font-weight: 700; padding: 2px 7px;
-      border-radius: 6px; background: rgba(245,197,24,0.15);
-      color: var(--gold); border: 1px solid rgba(245,197,24,0.25);
-    }
-    .rule-item {
-      display: flex; gap: 10px; margin-bottom: 10px;
-      font-size: 13px; line-height: 1.45; color: var(--muted);
-    }
-    .rule-item:last-child { margin-bottom: 0; }
-    .rule-icon { flex-shrink: 0; margin-top: 1px; }
-    .rule-item b { color: var(--text); }
-
-    /* ===== CLAIM ===== */
-    .claim-wrap { padding: 16px 16px 0; }
-    .btn-primary {
-      width: 100%; height: 54px; border: none; border-radius: 15px;
-      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
-      color: #fff; font-size: 16.5px; font-weight: 700;
-      cursor: pointer; box-shadow: 0 6px 24px var(--blue-glow);
-      transition: transform 0.12s, opacity 0.2s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-primary:disabled { opacity: 0.42; cursor: default; box-shadow: none; }
 
     .muted {
-      color: var(--muted); font-size: 12.5px; text-align: center;
-      margin: 12px 16px 0; line-height: 1.4;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      margin: 10px 16px 0;
     }
 
     /* ===== PAGES ===== */
-    .page { display: none; padding: 0 0 20px; }
-    .page.active { display: block; }
-    .page-title { font-size: 18px; font-weight: 700; padding: 8px 16px 12px; }
+    .page {
+      display: none;
+      padding-bottom: 20px;
+    }
 
-    .card {
-      margin: 0 16px 12px; padding: 16px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px;
+    .page.active {
+      display: block;
+    }
+
+    .page-title {
+      font-size: 19px;
+      font-weight: 700;
+      padding: 6px 16px 14px;
+      letter-spacing: -0.3px;
     }
 
     /* ===== MENU ===== */
     .menu-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       padding: 0 16px;
     }
+
     .menu-item {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 18px 14px; cursor: pointer;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 14px;
+      cursor: pointer;
       position: relative;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .menu-item .ico { font-size: 26px; margin-bottom: 8px; }
-    .menu-item .t { font-weight: 700; font-size: 14px; }
-    .menu-item .d { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+    .menu-item:active {
+      background: var(--card-hover);
+    }
+
+    .menu-item .ico {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .menu-item .t {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .menu-item .d {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
     .badge {
-      position: absolute; top: 10px; right: 10px;
-      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px;
+      position: absolute;
+      top: 11px;
+      right: 11px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 6px;
     }
+
     .badge.green { background: rgba(34,197,94,0.15); color: var(--green); }
     .badge.orange { background: rgba(245,158,11,0.15); color: #f59e0b; }
-    .badge.blue { background: rgba(47,155,255,0.15); color: var(--blue); }
-
-    /* ===== STREAK ===== */
-    .streak-hero {
-      margin: 0 16px 14px; padding: 20px 16px 16px;
-      background: linear-gradient(160deg, #121820, #0c1219);
-      border: 1px solid rgba(47,155,255,0.22);
-      border-radius: 20px; text-align: center;
-    }
-    .streak-day {
-      font-size: 44px; font-weight: 800; color: #fff; line-height: 1;
-    }
-    .streak-day span { font-size: 16px; color: var(--muted); font-weight: 600; }
-    .streak-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
-    .streak-reward-box {
-      margin-top: 14px; padding: 12px 14px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .streak-reward-label { font-size: 12px; color: var(--muted); }
-    .streak-reward-val { font-size: 19px; font-weight: 800; color: var(--gold); margin-top: 2px; }
-    .streak-calendar {
-      display: grid; grid-template-columns: repeat(5, 1fr);
-      gap: 6px; margin: 0 16px 14px;
-    }
-    .day-cell {
-      aspect-ratio: 1; background: var(--card); border: 1px solid var(--border);
-      border-radius: 10px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; font-size: 11px;
-    }
-    .day-cell.done {
-      background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.3); color: var(--green);
-    }
-    .day-cell.current {
-      background: rgba(47,155,255,0.15); border-color: var(--blue); color: var(--blue); font-weight: 700;
-    }
-    .day-cell .d-num { font-weight: 700; font-size: 13px; }
-    .day-cell .d-rew { font-size: 9px; color: var(--muted); margin-top: 1px; }
-    .day-cell.done .d-rew { color: var(--green); }
-    .day-cell.current .d-rew { color: var(--blue); }
+    .badge.blue { background: rgba(59,158,255,0.15); color: var(--blue); }
 
     /* ===== FRIENDS ===== */
     .ref-code {
-      font-size: 22px; font-weight: 800; color: var(--blue);
-      letter-spacing: 1px; text-align: center; margin: 10px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 1.5px;
+      text-align: center;
+      margin: 12px 0 4px;
     }
-    .btn-row { display: flex; gap: 8px; margin-top: 10px; }
-    .btn-sec {
-      flex: 1; height: 44px; border-radius: 12px;
-      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-      color: var(--text); font-weight: 600; font-size: 13.5px; cursor: pointer;
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
     }
-    .btn-main {
-      flex: 1; height: 44px; border-radius: 12px; border: none;
-      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
-      color: #fff; font-weight: 700; font-size: 13.5px; cursor: pointer;
-    }
+
     .ref-stats {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
     }
+
     .ref-stat {
-      background: var(--card2); border-radius: 12px; padding: 12px; text-align: center;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 13px;
+      text-align: center;
     }
-    .ref-stat .n { font-size: 20px; font-weight: 800; }
-    .ref-stat .l { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+    .ref-stat .n {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .ref-stat .l {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
 
     /* ===== WITHDRAW ===== */
     .rules-box {
-      margin: 0 16px 12px; padding: 14px;
-      background: rgba(47,155,255,0.06);
-      border: 1px solid rgba(47,155,255,0.15);
-      border-radius: 14px; font-size: 13px; line-height: 1.55; color: var(--muted);
+      margin: 0 16px 12px;
+      padding: 14px;
+      background: rgba(59,158,255,0.06);
+      border: 1px solid rgba(59,158,255,0.12);
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
     }
-    .rules-box b { color: var(--text); }
-    .input-wrap { margin: 0 16px 8px; }
-    .input-wrap label { font-size: 12.5px; color: var(--muted); display: block; margin-bottom: 6px; }
+
+    .rules-box b {
+      color: var(--text);
+    }
+
+    .input-wrap {
+      margin: 0 16px 8px;
+    }
+
+    .input-wrap label {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
     .input-row {
-      display: flex; align-items: center;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 0 12px; height: 48px;
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0 14px;
+      height: 50px;
     }
+
     .input-row input {
-      flex: 1; background: transparent; border: none; outline: none;
-      color: var(--text); font-size: 18px; font-weight: 700;
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
     }
-    .input-row span { color: var(--muted); font-weight: 600; }
+
+    .input-row span {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
     .quick-amounts {
-      display: flex; gap: 6px; margin: 8px 16px 12px; flex-wrap: wrap;
+      display: flex;
+      gap: 6px;
+      margin: 8px 16px 12px;
+      flex-wrap: wrap;
     }
+
     .chip {
-      padding: 8px 12px; border-radius: 10px;
-      background: var(--card); border: 1px solid var(--border);
-      color: var(--text); font-size: 12.5px; font-weight: 600; cursor: pointer;
+      padding: 8px 13px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .need-hold { margin: 0 16px 12px; font-size: 13px; color: var(--gold); }
+
+    .chip:active {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .need-hold {
+      margin: 0 16px 12px;
+      font-size: 13px;
+      color: var(--gold);
+    }
+
+    /* ===== STREAK ===== */
+    .streak-hero {
+      margin: 0 16px 14px;
+      padding: 20px 16px;
+      background: linear-gradient(160deg, #111a24, #0d1520);
+      border: 1px solid rgba(59,158,255,0.18);
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .streak-day {
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .streak-day span {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .streak-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .streak-reward-box {
+      margin-top: 16px;
+      padding: 13px 14px;
+      background: rgba(59,158,255,0.07);
+      border-radius: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .streak-reward-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .streak-reward-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+
+    .streak-calendar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 0 16px 14px;
+    }
+
+    .day-cell {
+      aspect-ratio: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .day-cell.done {
+      background: rgba(34,197,94,0.1);
+      border-color: rgba(34,197,94,0.28);
+      color: var(--green);
+    }
+
+    .day-cell.current {
+      background: rgba(59,158,255,0.12);
+      border-color: var(--blue);
+      color: var(--blue);
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(59,158,255,0.15);
+    }
+
+    .day-cell .d-num {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .day-cell .d-rew {
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .day-cell.done .d-rew { color: var(--green); }
+    .day-cell.current .d-rew { color: var(--blue); }
 
     /* ===== NAV ===== */
     .nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(7,11,16,0.94); backdrop-filter: blur(14px);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(7,11,16,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);
-      display: flex; justify-content: space-around;
-      padding: 8px 0 max(10px, env(safe-area-inset-bottom));
-      max-width: 430px; margin: 0 auto; z-index: 50;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 max(12px, env(safe-area-inset-bottom));
+      max-width: 430px;
+      margin: 0 auto;
+      z-index: 50;
     }
+
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--muted); font-size: 10.5px; cursor: pointer;
-      min-width: 56px; padding: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      min-width: 56px;
+      padding: 4px;
+      transition: color 0.15s;
     }
-    .nav-item.active { color: var(--blue); }
-    .nav-item .ni { font-size: 20px; }
+
+    .nav-item.active {
+      color: var(--blue);
+    }
+
+    .nav-item .ni {
+      font-size: 20px;
+    }
+
     .nav-center {
-      width: 48px; height: 48px; border-radius: 14px;
-      background: linear-gradient(135deg, #2f9bff, #1a7ae0);
-      display: flex; align-items: center; justify-content: center;
-      margin-top: -18px; box-shadow: 0 6px 18px var(--blue-glow);
-      color: #fff; font-size: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #3b9eff, #1a6fd0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -20px;
+      box-shadow: 0 6px 20px rgba(59,158,255,0.35);
+      color: #fff;
+      font-size: 20px;
     }
 
     /* ===== MODALS ===== */
     .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      z-index: 100; display: none; align-items: flex-end; justify-content: center;
-      backdrop-filter: blur(4px);
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.68);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
     }
-    .modal-bg.show { display: flex; }
+
+    .modal-bg.show {
+      display: flex;
+    }
+
     .modal {
-      width: 100%; max-width: 430px; max-height: 85vh;
-      background: #0e141c; border-radius: 20px 20px 0 0;
-      padding: 16px 16px 28px; overflow-y: auto;
-      animation: slideUp 0.25s ease;
-      border-top: 1px solid var(--border);
+      width: 100%;
+      max-width: 430px;
+      max-height: 85vh;
+      background: #0e151e;
+      border-radius: 22px 22px 0 0;
+      padding: 18px 16px 30px;
+      overflow-y: auto;
+      animation: slideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
+
     @keyframes slideUp {
-      from { transform: translateY(40px); opacity: 0; }
+      from { transform: translateY(50px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
+
     .modal-head {
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-head h3 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
       margin-bottom: 14px;
     }
-    .modal-head h3 { font-size: 16.5px; }
-    .modal-close {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(255,255,255,0.05); border: none; color: var(--text);
-      font-size: 16px; cursor: pointer;
-    }
-    .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+
     .tab {
-      padding: 7px 12px; border-radius: 8px; font-size: 12.5px; font-weight: 600;
-      background: rgba(255,255,255,0.05); color: var(--muted); cursor: pointer; border: none;
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
     }
-    .tab.active { background: var(--blue); color: #fff; }
+
+    .tab.active {
+      background: var(--blue);
+      color: #fff;
+    }
+
     .lvl-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
     }
-    .lvl-row.current { color: var(--blue); font-weight: 700; }
-    .info-text { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
-    .info-text li { margin-bottom: 8px; }
-    .info-text b { color: var(--text); }
+
+    .lvl-row.current {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .info-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .info-text li {
+      margin-bottom: 9px;
+    }
+
+    .info-text b {
+      color: var(--text);
+    }
 
     /* ===== TOAST ===== */
     .toast {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: #151d28; border: 1px solid var(--border);
-      color: var(--text); padding: 10px 18px; border-radius: 12px;
-      font-size: 13.5px; font-weight: 600; z-index: 200;
-      opacity: 0; transition: opacity 0.25s; pointer-events: none;
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #15202b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 11px 18px;
+      border-radius: 13px;
+      font-size: 13.5px;
+      font-weight: 600;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.25s;
+      pointer-events: none;
       white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     }
-    .toast.show { opacity: 1; }
-    .toast.ok { border-color: rgba(34,197,94,0.4); color: var(--green); }
 
-    .shop-rate { text-align: center; padding: 16px 0 6px; }
-    .shop-rate .big { font-size: 26px; font-weight: 800; color: var(--blue); }
-    .shop-rate .src { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+    .toast.show {
+      opacity: 1;
+    }
+
+    .toast.ok {
+      border-color: rgba(34,197,94,0.35);
+      color: var(--green);
+    }
   </style>
 </head>
 <body>
@@ -468,107 +927,75 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" onclick="openRules()" title="Правила">📘</button>
+        <button class="icon-btn" onclick="openRules()">📘</button>
         <button class="lvl-badge" onclick="openLevels()">⚡ Ур. <span id="hdr-lvl">1</span></button>
       </div>
     </div>
 
     <!-- PAGE: MINING -->
     <div class="page active" id="page-mine">
-      <!-- Balance -->
       <div class="balance-card">
         <div class="balance-top">
-          <div class="balance-label">💎 Баланс в приложении</div>
+          <div class="balance-label">Баланс в приложении</div>
           <div class="tag">Не влияет на уровень</div>
         </div>
-        <div class="balance-value"><span id="app-balance">0.0000</span><span>BTX</span></div>
+        <div class="balance-value">
+          <span id="app-balance">0.0000</span>
+          <span>BTX</span>
+        </div>
       </div>
 
-      <!-- Active Mining -->
       <div class="mining-card">
         <div class="mining-head">
           <div class="mining-title">
-            <div class="mining-icon">⛏️</div>
-            <div>
-              <div>Активный майнинг</div>
-              <div style="display:flex;align-items:center;gap:5px;margin-top:2px;">
-                <span class="status-dot"></span>
-                <span class="status-text">Работает</span>
-              </div>
-            </div>
+            <span class="status-dot"></span>
+            <span>Активный майнинг</span>
+            <span class="status-text">· Работает</span>
           </div>
-          <button class="leagues-btn" onclick="openLevels()">Лиги ℹ️</button>
+          <button class="leagues-btn" onclick="openLevels()">Лиги</button>
         </div>
         <div class="pending" id="pending-earn">+0.0000 BTX</div>
         <div class="progress-wrap">
-          <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+          </div>
           <div class="progress-meta">
-            <span id="prog-text">До Ур. 2 · 150 BTX на кошельке</span>
+            <span id="prog-text">До Ур. 2 (150 BTX)</span>
             <span id="prog-pct">0%</span>
           </div>
         </div>
       </div>
 
-      <!-- Stats -->
       <div class="stats">
         <div class="stat">
-          <div class="stat-icon">⚡</div>
           <div class="stat-val blue" id="stat-hour">20.0</div>
           <div class="stat-label">В час</div>
         </div>
         <div class="stat">
-          <div class="stat-icon">📅</div>
           <div class="stat-val green" id="stat-day">~480</div>
           <div class="stat-label">В сутки</div>
         </div>
         <div class="stat">
-          <div class="stat-icon">🚀</div>
           <div class="stat-val gold" id="stat-boost">×1.00</div>
           <div class="stat-label">Буст</div>
         </div>
       </div>
 
-      <!-- League / Hold -->
-      <div class="league-card" onclick="openLevels()">
-        <div class="league-lvl">
-          <span>LVL</span>
-          <div id="league-lvl-num">1</div>
-        </div>
-        <div class="league-info">
-          <div class="league-name" id="league-name">Новичок</div>
-          <div class="league-hold">Холд на кошельке: <span id="wallet-hold">0</span> BTX</div>
-          <div class="league-note">⚡ Определяет ваш уровень и доход</div>
-        </div>
-        <div class="league-arrow">›</div>
+      <div class="hold-bar">
+        <span class="hold-label">Холд на кошельке</span>
+        <span class="hold-val" id="wallet-hold">0 BTX</span>
       </div>
 
-      <!-- Rules -->
-      <div class="rules-card">
-        <div class="rules-title">
-          🛡️ Правила уровней майнинга
-          <span class="rules-badge">Важно</span>
+      <div class="wallet-card">
+        <div class="wallet-info">
+          <div class="wallet-title" id="wallet-title">TON-кошелёк не подключён</div>
+          <div class="wallet-addr" id="wallet-addr">Подключи, чтобы уровень считался от холда</div>
         </div>
-        <div class="rule-item">
-          <div class="rule-icon">✅</div>
-          <div>
-            <b>Уровень растёт ТОЛЬКО от холда</b> на подключённом TON-кошельке.
-            Баланс внутри приложения на уровень не влияет.
-          </div>
-        </div>
-        <div class="rule-item">
-          <div class="rule-icon">❌</div>
-          <div>
-            <b>Монеты в приложении НЕ учитываются</b> для уровня.
-            Чтобы повысить уровень — держите BTX на кошельке.
-          </div>
-        </div>
+        <button class="btn-main" id="wallet-btn" onclick="toggleWallet()">Подключить</button>
       </div>
 
-      <!-- Claim -->
       <div class="claim-wrap">
-        <button class="btn-primary" id="claim-btn" onclick="claimRewards()">
-          ✨ Собрать намайнeнное
-        </button>
+        <button class="btn-primary" id="claim-btn" onclick="claimRewards()">Собрать награды</button>
       </div>
       <p class="muted">Майнинг работает 24/7 даже когда приложение закрыто</p>
     </div>
@@ -577,11 +1004,11 @@
     <div class="page" id="page-shop">
       <div class="page-title">Магазин</div>
       <div class="card">
-        <div class="shop-rate">
-          <div class="big">1 BTX ≈ — TON</div>
-          <div class="src">Источник: STON.fi · скоро</div>
+        <div style="text-align:center;padding:18px 0 8px;">
+          <div style="font-size:28px;font-weight:800;color:var(--blue);">1 BTX ≈ — TON</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:6px;">Источник: STON.fi · скоро</div>
         </div>
-        <button class="btn-primary" onclick="showToast('Покупка через STON.fi — скоро')">Купить BTX</button>
+        <button class="btn-primary" style="margin-top:12px;" onclick="showToast('Покупка через STON.fi — скоро')">Купить BTX</button>
       </div>
     </div>
 
@@ -618,9 +1045,11 @@
     <!-- PAGE: STREAK -->
     <div class="page" id="page-streak">
       <div class="page-title">🔥 Daily Streak</div>
+
       <div class="streak-hero">
         <div class="streak-day"><span id="streak-current">0</span> <span>/ 30</span></div>
         <div class="streak-label">дней подряд</div>
+
         <div class="streak-reward-box">
           <div>
             <div class="streak-reward-label" id="streak-reward-label">Награда сегодня</div>
@@ -628,13 +1057,15 @@
           </div>
           <div style="text-align:right;">
             <div class="streak-reward-label">Всего собрано</div>
-            <div style="font-size:15px;font-weight:700;margin-top:2px;" id="streak-total">0</div>
+            <div style="font-size:15px;font-weight:700;" id="streak-total">0</div>
           </div>
         </div>
       </div>
-      <div class="claim-wrap" style="margin-bottom:16px;">
+
+      <div class="claim-wrap" style="margin-bottom:18px;">
         <button class="btn-primary" id="streak-claim-btn" onclick="claimStreak()">Забрать награду</button>
       </div>
+
       <div style="padding:0 16px 8px;font-size:13px;font-weight:600;color:var(--muted);">План на 30 дней</div>
       <div class="streak-calendar" id="streak-calendar"></div>
       <p class="muted">Заходите каждый день, чтобы не потерять серию</p>
@@ -644,14 +1075,14 @@
     <div class="page" id="page-friends">
       <div class="page-title">Друзья</div>
       <div class="card">
-        <div style="font-size:13.5px;color:var(--muted);text-align:center;margin-bottom:4px;">
-          Приглашай друзей и получай <b style="color:var(--gold)">5%</b> от их сборов навсегда
+        <div style="font-size:13.5px;color:var(--muted);text-align:center;margin-bottom:6px;">
+          Приглашай друзей и получай <b style="color:var(--gold)">5%</b> от их сборов
         </div>
-        <div style="font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:6px;">Ваша реферальная ссылка</div>
+        <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:4px;">Ваша реферальная ссылка</div>
         <div class="ref-code" id="ref-code">—</div>
         <div class="btn-row">
           <button class="btn-sec" onclick="copyRef()">Копировать</button>
-          <button class="btn-main" onclick="shareRef()">Поделиться</button>
+          <button class="btn-main" style="flex:1;" onclick="shareRef()">Поделиться</button>
         </div>
         <div class="ref-stats">
           <div class="ref-stat">
@@ -665,8 +1096,8 @@
         </div>
       </div>
       <div class="card">
-        <div style="font-size:13px;color:var(--muted);line-height:1.5;">
-          <b style="color:var(--text)">Условие активности:</b> друг считается активным при достижении Уровня 2 (холд от 150 BTX).
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.55;">
+          <b style="color:var(--text)">Условие:</b> друг считается активным при достижении Уровня 2 (холд от 150 BTX).
         </div>
       </div>
     </div>
@@ -675,10 +1106,10 @@
     <div class="page" id="page-withdraw">
       <div class="page-title">Вывод</div>
       <div class="rules-box">
-        <b>Минимальная сумма:</b> 10 000 BTX<br>
-        <b>Комиссия сервиса:</b> 5%<br>
-        <b>Холд на кошельке:</b> минимум 25% от суммы вывода<br>
-        <b>Интервал между заявками:</b> 24 часа
+        <b>Минимум:</b> 10 000 BTX<br>
+        <b>Комиссия:</b> 5%<br>
+        <b>Холд:</b> минимум 25% от суммы<br>
+        <b>Интервал:</b> 1 заявка / 24 часа
       </div>
       <div class="input-wrap">
         <label>Сумма для вывода</label>
@@ -697,11 +1128,11 @@
       <div class="claim-wrap">
         <button class="btn-primary" onclick="requestWithdraw()">Вывести на кошелёк</button>
       </div>
-      <div class="card" style="margin-top:12px;">
-        <div style="font-size:13.5px;font-weight:600;margin-bottom:8px;">История выводов</div>
-        <div id="withdraw-history"><div class="muted" style="margin:0;">История выводов пуста</div></div>
+      <div class="card" style="margin-top:14px;">
+        <div style="font-size:13.5px;font-weight:600;margin-bottom:10px;">История выводов</div>
+        <div id="withdraw-history"><div class="muted" style="margin:0;">История пуста</div></div>
       </div>
-      <p class="muted">Вывод обрабатывается вручную до 24 часов</p>
+      <p class="muted">Обработка заявок до 24 часов</p>
     </div>
   </div>
 
@@ -731,8 +1162,8 @@
         <h3>Система уровней</h3>
         <button class="modal-close" onclick="closeLevels()">✕</button>
       </div>
-      <div class="info-text" style="margin-bottom:12px;">
-        Уровень и буст зависят <b>только</b> от холда BTX на TON-кошельке.
+      <div class="info-text" style="margin-bottom:14px;">
+        Уровень зависит <b>только</b> от холда BTX на TON-кошельке.
       </div>
       <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:8px;">
         <span>Текущий уровень</span><b id="m-lvl">1</b>
@@ -740,11 +1171,11 @@
       <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:8px;">
         <span>Холд на кошельке</span><b id="m-hold" style="color:var(--blue)">0 BTX</b>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:16px;">
         <span>Множитель</span><b id="m-boost" style="color:var(--green)">×1.00</b>
       </div>
       <div id="levels-body"></div>
-      <button class="btn-primary" style="margin-top:16px;" onclick="closeLevels()">Понятно</button>
+      <button class="btn-primary" style="margin-top:18px;" onclick="closeLevels()">Понятно</button>
     </div>
   </div>
 
@@ -762,7 +1193,7 @@
       <div id="tab-rules" class="info-text">
         <ul style="padding-left:18px;">
           <li><b>Майнинг 24/7</b> — начисление идёт на сервере даже когда приложение закрыто.</li>
-          <li><b>Уровень</b> зависит только от холда BTX на вашем TON-кошельке.</li>
+          <li><b>Уровень</b> зависит только от холда BTX на TON-кошельке.</li>
           <li><b>Вывод:</b> мин. 10 000 BTX, комиссия 5%, холд 25%, 1 заявка / 24ч.</li>
           <li><b>Рефералы:</b> 5% от сборов приглашённых друзей.</li>
           <li><b>Daily Streak:</b> заходите каждый день и получайте растущую награду.</li>
@@ -770,9 +1201,9 @@
       </div>
       <div id="tab-about" class="info-text" style="display:none;">
         <p><b>BitneX</b> — Web3 mining-приложение в экосистеме TON.</p>
-        <p style="margin-top:10px;">Сеть: <b>TON</b> · Стандарт: <b>Jetton</b></p>
+        <p style="margin-top:12px;">Сеть: <b>TON</b> · Стандарт: <b>Jetton</b></p>
       </div>
-      <button class="btn-primary" style="margin-top:16px;" onclick="closeRules()">Закрыть</button>
+      <button class="btn-primary" style="margin-top:18px;" onclick="closeRules()">Закрыть</button>
     </div>
   </div>
 
@@ -793,14 +1224,14 @@
     const startParam = tg?.initDataUnsafe?.start_param || null;
 
     const LEVELS = [
-      { level: 1, hold: 0,     rate: 20,  boost: 1.00, name: 'Новичок' },
-      { level: 2, hold: 150,   rate: 24,  boost: 1.20, name: 'Бронза' },
-      { level: 3, hold: 500,   rate: 30,  boost: 1.50, name: 'Серебро' },
-      { level: 4, hold: 1200,  rate: 40,  boost: 2.00, name: 'Золото' },
-      { level: 5, hold: 2500,  rate: 55,  boost: 2.75, name: 'Платина' },
-      { level: 6, hold: 6000,  rate: 80,  boost: 4.00, name: 'Алмаз' },
-      { level: 7, hold: 15000, rate: 120, boost: 6.00, name: 'Мастер' },
-      { level: 8, hold: 40000, rate: 200, boost: 10.0, name: 'Легенда' },
+      { level: 1, hold: 0,     rate: 20,  boost: 1.00 },
+      { level: 2, hold: 150,   rate: 24,  boost: 1.20 },
+      { level: 3, hold: 500,   rate: 30,  boost: 1.50 },
+      { level: 4, hold: 1200,  rate: 40,  boost: 2.00 },
+      { level: 5, hold: 2500,  rate: 55,  boost: 2.75 },
+      { level: 6, hold: 6000,  rate: 80,  boost: 4.00 },
+      { level: 7, hold: 15000, rate: 120, boost: 6.00 },
+      { level: 8, hold: 40000, rate: 200, boost: 10.0 },
     ];
 
     const STREAK_REWARDS = [
@@ -845,14 +1276,10 @@
       document.getElementById('stat-hour').textContent = (hourlyRate * boost).toFixed(1);
       document.getElementById('stat-day').textContent = '~' + Math.round(hourlyRate * boost * 24);
       document.getElementById('stat-boost').textContent = '×' + boost.toFixed(2);
-      document.getElementById('wallet-hold').textContent = walletHold.toLocaleString('ru-RU');
+      document.getElementById('wallet-hold').textContent = walletHold.toLocaleString('ru-RU') + ' BTX';
       document.getElementById('hdr-lvl').textContent = currentLevel;
-      document.getElementById('league-lvl-num').textContent = currentLevel;
       document.getElementById('ref-count').textContent = refCount;
       document.getElementById('ref-earned').textContent = Number(refEarned).toFixed(2);
-
-      const lvlInfo = LEVELS.find(l => l.level === currentLevel) || LEVELS[0];
-      document.getElementById('league-name').textContent = lvlInfo.name || ('Уровень ' + currentLevel);
 
       const next = nextLevel();
       if (next) {
@@ -860,7 +1287,7 @@
         const range = next.hold - prevHold;
         const progress = Math.min(100, Math.max(0, ((walletHold - prevHold) / range) * 100));
         document.getElementById('prog-fill').style.width = progress + '%';
-        document.getElementById('prog-text').textContent = 'До Ур. ' + next.level + ' · ' + next.hold.toLocaleString('ru-RU') + ' BTX на кошельке';
+        document.getElementById('prog-text').textContent = 'До Ур. ' + next.level + ' (' + next.hold.toLocaleString('ru-RU') + ' BTX)';
         document.getElementById('prog-pct').textContent = Math.floor(progress) + '%';
       } else {
         document.getElementById('prog-fill').style.width = '100%';
@@ -907,7 +1334,10 @@
         if (i === streakCount && claimedToday) cls += ' current';
 
         const rew = STREAK_REWARDS[i - 1] || 2000;
-        html += `<div class="${cls}"><div class="d-num">${i}</div><div class="d-rew">${rew}</div></div>`;
+        html += `<div class="${cls}">
+          <div class="d-num">${i}</div>
+          <div class="d-rew">${rew}</div>
+        </div>`;
       }
       cal.innerHTML = html;
     }
@@ -938,13 +1368,31 @@
       if (data.next_reward != null) nextReward = Number(data.next_reward);
       if (data.total_streak_claimed != null) totalStreakClaimed = Number(data.total_streak_claimed);
 
+      updateWalletUI();
       updateUI();
+    }
+
+    function updateWalletUI() {
+      const title = document.getElementById('wallet-title');
+      const addr = document.getElementById('wallet-addr');
+      const btn = document.getElementById('wallet-btn');
+      if (!title) return;
+      if (walletAddress) {
+        title.textContent = 'Кошелёк подключён';
+        addr.textContent = walletAddress.slice(0, 6) + '…' + walletAddress.slice(-4);
+        btn.textContent = 'Отключить';
+      } else {
+        title.textContent = 'TON-кошелёк не подключён';
+        addr.textContent = 'Подключи, чтобы уровень считался от холда';
+        btn.textContent = 'Подключить';
+      }
     }
 
     async function toggleWallet() {
       if (walletAddress && tonConnectUI) {
         try { await tonConnectUI.disconnect(); } catch (e) {}
         walletAddress = null;
+        updateWalletUI();
         showToast('Кошелёк отключён');
         return;
       }
@@ -1023,12 +1471,7 @@
       const perSec = (hourlyRate * boost) / 3600;
       pending += perSec;
       const el = document.getElementById('pending-earn');
-      if (el) {
-        el.textContent = '+' + pending.toFixed(4) + ' BTX';
-        el.classList.remove('bump');
-        void el.offsetWidth;
-        el.classList.add('bump');
-      }
+      if (el) el.textContent = '+' + pending.toFixed(4) + ' BTX';
       const btn = document.getElementById('claim-btn');
       if (btn && !claiming) btn.disabled = pending < 0.0001;
     }, 1000);
@@ -1108,7 +1551,7 @@
       document.getElementById('m-boost').textContent = '×' + boost.toFixed(2);
       document.getElementById('levels-body').innerHTML = LEVELS.map(l =>
         `<div class="lvl-row ${l.level === currentLevel ? 'current' : ''}">
-          <span>Ур. ${l.level} · ${l.name}</span>
+          <span>Ур. ${l.level}</span>
           <span>${l.hold.toLocaleString('ru-RU')} BTX</span>
           <span>${l.rate}/ч</span>
           <span>×${l.boost.toFixed(2)}</span>
@@ -1116,18 +1559,30 @@
       ).join('');
       document.getElementById('levels-modal').classList.add('show');
     }
-    function closeLevels() { document.getElementById('levels-modal').classList.remove('show'); }
-    function openRules() { document.getElementById('rules-modal').classList.add('show'); }
-    function closeRules() { document.getElementById('rules-modal').classList.remove('show'); }
+
+    function closeLevels() {
+      document.getElementById('levels-modal').classList.remove('show');
+    }
+
+    function openRules() {
+      document.getElementById('rules-modal').classList.add('show');
+    }
+
+    function closeRules() {
+      document.getElementById('rules-modal').classList.remove('show');
+    }
+
     function switchTab(name) {
       document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
       document.getElementById('tab-rules').style.display = name === 'rules' ? 'block' : 'none';
       document.getElementById('tab-about').style.display = name === 'about' ? 'block' : 'none';
     }
+
     function setWithdraw(v) {
       document.getElementById('withdraw-amount').value = v;
       updateUI();
     }
+
     document.getElementById('withdraw-amount')?.addEventListener('input', updateUI);
 
     async function requestWithdraw() {
@@ -1162,13 +1617,13 @@
         const list = data.withdrawals || [];
         const box = document.getElementById('withdraw-history');
         if (!list.length) {
-          box.innerHTML = '<div class="muted" style="margin:0;">История выводов пуста</div>';
+          box.innerHTML = '<div class="muted" style="margin:0;">История пуста</div>';
           return;
         }
         box.innerHTML = list.map(w => {
           const st = w.status === 'paid' ? 'Выплачено' : w.status === 'rejected' ? 'Отклонено' : 'В обработке';
           const col = w.status === 'paid' ? 'var(--green)' : w.status === 'rejected' ? 'var(--danger)' : 'var(--gold)';
-          return `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px;">
+          return `<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
             <span>${Number(w.amount).toLocaleString('ru-RU')} BTX</span>
             <span style="color:${col}">${st}</span>
           </div>`;
@@ -1181,6 +1636,7 @@
       const link = 'https://t.me/BitneXMining_bot?start=' + code;
       navigator.clipboard?.writeText(link).then(() => showToast('Ссылка скопирована', true));
     }
+
     function shareRef() {
       const code = document.getElementById('ref-code').textContent;
       const link = 'https://t.me/BitneXMining_bot?start=' + code;
@@ -1195,7 +1651,7 @@
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.className = 'toast show' + (ok ? ' ok' : '');
-      setTimeout(() => t.classList.remove('show'), 2200);
+      setTimeout(() => t.classList.remove('show'), 2300);
     }
 
     if (user) {
@@ -1214,6 +1670,7 @@
             await saveWallet(wallet.account.address);
           } else if (!wallet) {
             walletAddress = null;
+            updateWalletUI();
           }
         });
       }
